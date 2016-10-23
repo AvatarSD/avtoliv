@@ -4,53 +4,40 @@
 
 #include <avr/io.h>
 
-void ADCinit()
-{
+uint16_t min_humidity = 50;
+uint16_t max_humidity = 200;
+uint16_t min_pump_on_time = 6;
+uint16_t wait_time_afterpump = 30;
 
+void delay_s(uint16_t s) {
+	for(; s > 0; s--) _delay_ms(1000);
+}
+
+void handleHerbs()
+{
+	if(HWiface::humidity() < min_humidity)
+		while(HWiface::humidity() < max_humidity)
+		{
+			HWiface::turnPumpOn();
+			delay_s(min_pump_on_time);
+			HWiface::turnPumpOff();
+			delay_s(wait_time_afterpump);
+		}
 }
 
 int main()
 {
 	HWiface::init();
 
-
-	HWiface::turnLedOn();
 	_delay_ms(500);
-	HWiface::turnLedOff();
+	HWiface::turnLedOn();
+
 
 	while(1)
 	{
-		//_delay_ms(1000);
+		handleHerbs();
+		_delay_ms(10000);
 
-//		if(HWiface::haveSupply())
-//			HWiface::turnLedOn();
-//		else
-//			HWiface::turnLedOff();
-
-
-
-//		_delay_ms(1000);
-
-		if(HWiface::humidity() < 950)
-			HWiface::turnLedOn();
-		else
-			HWiface::turnLedOff();
-		_delay_ms(150);
-
-		//		HWiface::turnPumpOn();
-		//		_delay_ms(2000);
-
-		//		HWiface::turnPumpOff();
-		//		_delay_ms(1000);
-
-		//		HWiface::turnSensorOn();
-		//		_delay_ms(20);
-
-		//		HWiface::turnSensorOff();
-		//		_delay_ms(2000);
-
-		//		HWiface::turnLedOff();
-		//		_delay_ms(3000);
 	}
 	return 0;
 }

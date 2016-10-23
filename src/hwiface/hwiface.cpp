@@ -23,6 +23,7 @@
 #define SENS_OFFSTATE true
 // num of sensor date analog  pin
 #define ADC_SENS 2
+#define IS_ADC_INVERSE 1
 //eeeeeeenable time
 #define TIME_TO_READ_MS 20
 
@@ -49,7 +50,11 @@ uint16_t HWiface::humidity()
 {
 	turnSensorOn();
 	_delay_ms(TIME_TO_READ_MS);
+#if IS_ADC_INVERSE
+	uint16_t data = 1024 - Analog::read(ADC_SENS);
+#else
 	uint16_t data = Analog::read(ADC_SENS);
+#endif
 	turnSensorOff();
 	return data;
 }
