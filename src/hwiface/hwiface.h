@@ -8,9 +8,10 @@ class HWiface
 public:
 	static bool haveSupply();
 	static uint16_t humidity();
-	static void turnSensorOnLedOff();
-	static void turnSensorOffLedOn();
-	static void turnSensorOffLedOff();
+	static void turnSensorOn();
+	static void turnSensorOff();
+	static void turnLedOff();
+	static void turnLedOn();
 	static void turnPumpOn();
 	static void turnPumpOff();
 	static void init();

@@ -22,7 +22,6 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flags}")
 
 
 file(GLOB_RECURSE EXE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
-
 add_executable(${PROJECT_NAME} ${EXE_SRC})
 
 
