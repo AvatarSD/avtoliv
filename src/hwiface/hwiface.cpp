@@ -1,6 +1,7 @@
 #include "hwiface.h"
 #include <avr/io.h>
 #include <util/delay.h>
+#include "ADC/adc.h"
 
 // pump supply
 #define DDR_PUMP DDRB
@@ -22,6 +23,8 @@
 #define SENS_OFFSTATE true
 // num of sensor date analog  pin
 #define ADC_SENS 2
+//eeeeeeenable time
+#define TIME_TO_READ_MS 20
 
 // analog pin to testing presense of main power(supplying by network)
 #define ADC_AC 3
@@ -36,10 +39,19 @@
 
 #define setbit(port,num,onoff) port=(onoff<<num)|(port&~(1<<num))
 
+void HWiface::init()
+{
+	turnPumpOff();
+	Analog::init();
+}
+
 uint16_t HWiface::humidity()
 {
-	return 0; // todo read adc
-
+	turnSensorOn();
+	_delay_ms(TIME_TO_READ_MS);
+	uint16_t data = Analog::read(ADC_SENS);
+	turnSensorOff();
+	return data;
 }
 
 bool HWiface::haveSupply()
@@ -49,7 +61,7 @@ bool HWiface::haveSupply()
 
 	_delay_us(10);
 
-	uint16_t adcData = 0;// todo read adc
+	uint16_t adcData = Analog::read(ADC_AC);
 
 	bool ret_val;
 	if(adcData > TRESHOLD_DATA_AC)
@@ -95,13 +107,6 @@ void HWiface::turnPumpOff()
 {
 	DDR_PUMP |= _BV(PINNUM_PUMP);
 	PORT_PUMP &= ~_BV(PINNUM_PUMP);
-}
-
-void HWiface::init()
-{
-	turnPumpOff();
-	turnSensorOff();
-	turnLedOn();
 }
 
 
