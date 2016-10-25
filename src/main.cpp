@@ -4,8 +4,8 @@
 
 #include <avr/io.h>
 
-uint16_t min_humidity = 50;
-uint16_t max_humidity = 200;
+uint16_t min_humidity = 350;
+uint16_t max_humidity = 700;
 uint16_t min_pump_on_time = 6;
 uint16_t wait_time_afterpump = 30;
 
@@ -37,7 +37,7 @@ int main()
 	{
 		handleHerbs();
 		_delay_ms(10000);
-
 	}
+
 	return 0;
 }
