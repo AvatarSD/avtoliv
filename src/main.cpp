@@ -6,8 +6,8 @@
 
 uint16_t min_humidity = 350;
 uint16_t max_humidity = 700;
-uint16_t min_pump_on_time = 6;
-uint16_t wait_time_afterpump = 30;
+uint16_t min_pump_on_time = 4;
+uint16_t wait_time_afterpump = 120;
 
 void delay_s(uint16_t s) {
 	for(; s > 0; s--) _delay_ms(1000);
