@@ -1,43 +1,45 @@
 #include <avr/io.h>
 #include <util/delay.h>
-#include "hwiface/hwiface.h"
 
+#include <hwiface.h>
 #include <avr/io.h>
+#include <mappedmemory.h>
 
-uint16_t min_humidity = 350;
-uint16_t max_humidity = 700;
-uint16_t min_pump_on_time = 4;
-uint16_t wait_time_afterpump = 120;
 
-void delay_s(uint16_t s) {
-	for(; s > 0; s--) _delay_ms(1000);
+
+PolivSettings settings;
+MappedMemory memory(&settings);
+HWiface * hardware = HWiface::instance();
+
+
+void delay_s(uint16_t s)
+{
+    for(; s > 0; s--) _delay_ms(1000);
 }
 
 void handleHerbs()
 {
-	if(HWiface::humidity() < min_humidity)
-		while(HWiface::humidity() < max_humidity)
-		{
-			HWiface::turnPumpOn();
-			delay_s(min_pump_on_time);
-			HWiface::turnPumpOff();
-			delay_s(wait_time_afterpump);
-		}
+    if(hardware->humidity() < settings.getMinHumidity())
+        while(hardware->humidity() < settings.getMaxHumidity()) {
+            hardware->turnPumpOn();
+            delay_s(settings.getMinPumpOnTime());
+            hardware->turnPumpOff();
+            delay_s(settings.getWaitTimeAfterpump());
+        }
 }
 
 int main()
 {
-	HWiface::init();
+    hardware->init();
 
-	_delay_ms(500);
-	HWiface::turnLedOn();
+    _delay_ms(500);
+    hardware->turnLedOn();
 
 
-	while(1)
-	{
-		handleHerbs();
-		_delay_ms(10000);
-	}
+    while(1) {
+        handleHerbs();
+        _delay_ms(10000);
+    }
 
-	return 0;
+    return 0;
 }

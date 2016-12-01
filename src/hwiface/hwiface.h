@@ -6,15 +6,20 @@
 class HWiface
 {
 public:
-	static bool haveSupply();
-	static uint16_t humidity();
-	static void turnSensorOn();
-	static void turnSensorOff();
-	static void turnLedOff();
-	static void turnLedOn();
-	static void turnPumpOn();
-	static void turnPumpOff();
-	static void init();
+	bool haveSupply();
+	uint16_t humidity();
+	void turnSensorOn();
+	void turnSensorOff();
+	void turnLedOff();
+	void turnLedOn();
+	void turnPumpOn();
+	void turnPumpOff();
+	void init();
+
+	static HWiface*instance(){
+		static HWiface iface;
+		return &iface;
+	}
 
 private:
 	HWiface() {}

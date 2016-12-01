@@ -1,0 +1,6 @@
+[submodule "src/net"]
+	path = src/net
+	url = git@github.com:AvatarSD/usi-i2c-slave-withserver.git
+[submodule "src/settings/polymorphmemory"]
+	path = src/settings/polymorphmemory
+	url = git@github.com:AvatarSD/polymorphmemory.git
