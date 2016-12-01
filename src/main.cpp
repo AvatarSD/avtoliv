@@ -14,14 +14,19 @@
 void delay_s(uint16_t s);
 void handleHerbs();
 
+HWiface * hdware;
+PolivSettings * stngs;
+
 int main()
 {
     auto hardware = HWiface::instance();
+    hdware = hardware;
     hardware->init();
 
     auto usi = USI::instance();
 
     PolivSettings settings;
+    stngs = &settings;
     MappedMemory memory(&settings);
 
     UsiTwiSlave network(usi);
@@ -51,12 +56,12 @@ int main()
 
 void handleHerbs()
 {
-    if(hardware->humidity() < settings.getMinHumidity())
-        while(hardware->humidity() < settings.getMaxHumidity()) {
-            hardware->turnPumpOn();
-            delay_s(settings.getMinPumpOnTime());
-            hardware->turnPumpOff();
-            delay_s(settings.getWaitTimeAfterpump());
+    if(hdware->humidity() < stngs->getMinHumidity())
+        while(hdware->humidity() < stngs->getMaxHumidity()) {
+            hdware->turnPumpOn();
+            delay_s(stngs->getMinPumpOnTime());
+            hdware->turnPumpOff();
+            delay_s(stngs->getWaitTimeAfterpump());
         }
 }
 

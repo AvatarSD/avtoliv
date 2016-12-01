@@ -17,7 +17,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 project("avtopoliv")
 
 
-SET(flags "-mmcu=attiny85 -D__AVR_ATtiny85__ -DF_CPU=1000000UL \
+SET(flags "-mmcu=attiny85 -D__AVR_ATtiny85__ -DF_CPU=8000000UL \
 	-Wall -Wl,--gc-sections -fdata-sections -ffunction-sections -fno-threadsafe-statics -O3")
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${flags}")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flags}")
