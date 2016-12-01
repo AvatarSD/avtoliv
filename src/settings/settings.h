@@ -7,8 +7,8 @@
 
 #define GUID_SIZE 16
 
-#define I2C_SLAVE_ADDRESS 0x04 // TODO for test
-#define MULTICAST_ADDRESS 0x03
+#define I2C_SLAVE_ADDRESS 0x15 // TODO for test
+#define MULTICAST_ADDRESS 0x30
 
 
 

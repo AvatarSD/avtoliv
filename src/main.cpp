@@ -7,10 +7,6 @@
 
 
 
-#define I2C_ADDR  0x05
-#define I2C_COMMN 0x10
-
-
 void delay_s(uint16_t s);
 void handleHerbs();
 
@@ -30,13 +26,12 @@ int main()
     MappedMemory memory(&settings);
 
     UsiTwiSlave network(usi);
-    network.setAddress(I2C_SLAVE_ADDRESS);
-    network.setMulticastAddress(MULTICAST_ADDRESS);
+    network.init(I2C_SLAVE_ADDRESS, MULTICAST_ADDRESS);
+
     I2CSlaveServer server(&network, &memory);
 
 
 
-    network.init();
 
 
 
