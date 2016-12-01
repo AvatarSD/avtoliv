@@ -1,21 +1,53 @@
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <util/delay.h>
 
 #include <hwiface.h>
-#include <avr/io.h>
 #include <mappedmemory.h>
 
 
 
-PolivSettings settings;
-MappedMemory memory(&settings);
-HWiface * hardware = HWiface::instance();
+#define I2C_ADDR  0x05
+#define I2C_COMMN 0x10
 
 
-void delay_s(uint16_t s)
+void delay_s(uint16_t s);
+void handleHerbs();
+
+int main()
 {
-    for(; s > 0; s--) _delay_ms(1000);
+    auto hardware = HWiface::instance();
+    hardware->init();
+
+    auto usi = USI::instance();
+
+    PolivSettings settings;
+    MappedMemory memory(&settings);
+
+    UsiTwiSlave network(usi);
+    network.setAddress(I2C_SLAVE_ADDRESS);
+    network.setMulticastAddress(MULTICAST_ADDRESS);
+    I2CSlaveServer server(&network, &memory);
+
+
+
+    network.init();
+
+
+
+    _delay_ms(500);
+    hardware->turnLedOn();
+
+    sei();
+
+    while(1) {
+        handleHerbs();
+        _delay_ms(10000);
+    }
+
+    return 0;
 }
+
 
 void handleHerbs()
 {
@@ -28,18 +60,7 @@ void handleHerbs()
         }
 }
 
-int main()
+void delay_s(uint16_t s)
 {
-    hardware->init();
-
-    _delay_ms(500);
-    hardware->turnLedOn();
-
-
-    while(1) {
-        handleHerbs();
-        _delay_ms(10000);
-    }
-
-    return 0;
+    for(; s > 0; s--) _delay_ms(1000);
 }
