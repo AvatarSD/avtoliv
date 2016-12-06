@@ -8,7 +8,7 @@
 class MappedMemory : public iMappedMemory
 {
 public:
-    MappedMemory(PolivSettings * settings);
+    MappedMemory(IPolivSettingsExt * settings, IPolivControl * control);
 
     int8_t write(uint8_t addr, uint8_t data);
     int16_t read(uint8_t addr);

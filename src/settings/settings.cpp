@@ -123,27 +123,27 @@ void PolivSettings::setI2cAddress(uint8_t addr)
     eeprom_write_byte(&backstagemem::slaveAddress, addr);
 }
 
-uint8_t PolivSettings::getI2cAddress()
+uint8_t PolivSettings::getI2cAddress() const
 {
     return eeprom_read_byte(&backstagemem::slaveAddress);
 }
 
-uint8_t PolivSettings::getGUID(uint8_t pos)
+uint8_t PolivSettings::getGUID(uint8_t pos) const
 {
     return eeprom_read_byte(&backstagemem::GUID[pos]);
 }
 
-uint8_t PolivSettings::getDeviceName(uint8_t pos)
+uint8_t PolivSettings::getDeviceName(uint8_t pos) const
 {
     return eeprom_read_byte(&backstagemem::deviceName[pos]);
 }
 
-uint8_t PolivSettings::getDeviceSWver(uint8_t pos)
+uint8_t PolivSettings::getDeviceSWver(uint8_t pos) const
 {
     return *(((uint8_t *) &backstagemem::deviceSWver) + pos);
 }
 
-uint8_t PolivSettings::getDeviceHWver(uint8_t pos)
+uint8_t PolivSettings::getDeviceHWver(uint8_t pos) const
 {
     return eeprom_read_byte(((uint8_t *)&backstagemem::deviceHWver) + pos);
 }

@@ -38,7 +38,8 @@
 #include <settings.h>
 
 
-PolivSettings * settng = nullptr;
+IPolivSettingsExt * settng = nullptr;
+IPolivControl * ctrl = nullptr;
 
 class GUID : public Composite<uint8_t[GUID_SIZE]>
 {
@@ -190,9 +191,12 @@ class MainMemoryMap : public Composite<CommonShared,
 
 typedef MainMemoryMap Map;
 
-MappedMemory::MappedMemory(PolivSettings * settings)
+MappedMemory::MappedMemory(IPolivSettingsExt * settings,
+                           IPolivControl * control)
 {
     settng = settings;
+    ctrl = control;
+
 }
 int8_t MappedMemory::write(uint8_t addr, uint8_t data)
 {
