@@ -1,10 +1,10 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-
+#include <settings.h>
 #include <hwiface.h>
 #include <mappedmemory.h>
-
+#include <server.h>
 
 
 void delay_s(uint16_t s);
@@ -19,26 +19,17 @@ int main()
     hdware = hardware;
     hardware->init();
 
-    auto usi = USI::instance();
-
     PolivSettings settings;
-    stngs = &settings;
     MappedMemory memory(&settings);
+    stngs = &settings;
 
-    UsiTwiSlave network(usi);
-    network.init(I2C_SLAVE_ADDRESS, MULTICAST_ADDRESS);
-
+    UsiTwiSlave network(USI::instance());
     I2CSlaveServer server(&network, &memory);
-
-
-
-
-
+    network.init(settings.getI2cAddress(), MULTICAST_ADDR);
 
     _delay_ms(500);
-    hardware->turnLedOn();
-
     sei();
+    hardware->turnLedOn();
 
     while(1) {
         handleHerbs();

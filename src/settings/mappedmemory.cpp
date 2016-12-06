@@ -35,14 +35,10 @@
 
 #include "mappedmemory.h"
 #include <polymorphmemory.h>
-
-
-
-
+#include <settings.h>
 
 
 PolivSettings * settng = nullptr;
-
 
 class GUID : public Composite<uint8_t[GUID_SIZE]>
 {
@@ -56,6 +52,43 @@ public:
         return settng->getGUID(addr);
     }
 };
+class DeviceName : public Composite<uint8_t[DEVNAME_SIZE]>
+{
+public:
+    static Error write(Address addr, uint8_t data, Num num)
+    {
+        return OK;
+    }
+    static ReadType read(Address addr, Num num = 0)
+    {
+        return settng->getDeviceName(addr);
+    }
+};
+class DeviceSWver : public Composite<uint16_t>
+{
+public:
+    static Error write(Address addr, uint8_t data, Num num)
+    {
+        return OK;
+    }
+    static ReadType read(Address addr, Num num = 0)
+    {
+        return settng->getDeviceSWver(addr);
+    }
+};
+class DeviceHWver : public Composite<uint16_t>
+{
+public:
+    static Error write(Address addr, uint8_t data, Num num)
+    {
+        return OK;
+    }
+    static ReadType read(Address addr, Num num = 0)
+    {
+        return settng->getDeviceHWver(addr);
+    }
+};
+
 class SlaveAddress : public Composite<uint8_t>
 {
 public:
@@ -64,7 +97,7 @@ public:
 
     static Error write(Address addr, uint8_t data, Num num)
     {
-        if(data == MULTICAST_ADDRESS) {
+        if(data == MULTICAST_ADDR) {
             settng->setI2cAddress(data);
             return OK;
         }
@@ -80,37 +113,95 @@ public:
         return settng->getI2cAddress();
     }
 };
-uint8_t SlaveAddress::newAddr = MULTICAST_ADDRESS;
+uint8_t SlaveAddress::newAddr = MULTICAST_ADDR;
 bool SlaveAddress::flag = 0;
 
+class CommonShared : public
+    Composite<GUID, DeviceName, DeviceSWver, DeviceHWver, SlaveAddress> {};
 
-class MainMemoryMap : public Composite<GUID, SlaveAddress> {};
+class Humidity : public Composite<uint16_t>
+{
+public:
+    static Error write(Address addr, uint8_t data, Num num)
+    {
+        settng->setHumidity(data, addr);
+        return OK;
+    }
+    static ReadType read(Address addr, Num num = 0)
+    {
+        return settng->getHumidity(addr);
+    }
+};
+class MaxHumidity : public Composite<uint16_t>
+{
+public:
+    static Error write(Address addr, uint8_t data, Num num)
+    {
+        settng->setMaxHumidity(data, addr);
+        return OK;
+    }
+    static ReadType read(Address addr, Num num = 0)
+    {
+        return settng->getMaxHumidity(addr);
+    }
+};
+class MinHumidity : public Composite<uint16_t>
+{
+public:
+    static Error write(Address addr, uint8_t data, Num num)
+    {
+        settng->setMinHumidity(data, addr);
+        return OK;
+    }
+    static ReadType read(Address addr, Num num = 0)
+    {
+        return settng->getMinHumidity(addr);
+    }
+};
+class AfterpumpWait : public Composite<uint16_t>
+{
+public:
+    static Error write(Address addr, uint8_t data, Num num)
+    {
+        settng->setWaitTimeAfterpump(data, addr);
+        return OK;
+    }
+    static ReadType read(Address addr, Num num = 0)
+    {
+        return settng->getWaitTimeAfterpump(addr);
+    }
+};
+class PumpOnTime : public Composite<uint16_t>
+{
+public:
+    static Error write(Address addr, uint8_t data, Num num)
+    {
+        settng->setMinPumpOnTime(data, addr);
+        return OK;
+    }
+    static ReadType read(Address addr, Num num = 0)
+    {
+        return settng->getMinPumpOnTime(addr);
+    }
+};
+
+class MainMemoryMap : public Composite<CommonShared,
+    Humidity, MaxHumidity, MinHumidity, PumpOnTime, AfterpumpWait> {};
 
 typedef MainMemoryMap Map;
-
-
-
-
-
-
-
-
 
 MappedMemory::MappedMemory(PolivSettings * settings)
 {
     settng = settings;
 }
-
 int8_t MappedMemory::write(uint8_t addr, uint8_t data)
 {
     return Map::write(addr, data);
 }
-
 int16_t MappedMemory::read(uint8_t addr)
 {
     return Map::read(addr);
 }
-
 uint16_t MappedMemory::mapsize()
 {
     return sizeof(Map);
