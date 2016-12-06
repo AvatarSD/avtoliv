@@ -6,12 +6,6 @@ HerbsHandlerSimpl::HerbsHandlerSimpl(HWiface * hardware,
 
 }
 
-
-void HerbsHandlerSimpl::setMode()
-{
-}
-
-
 void HerbsHandlerSimpl::handleHerbs()
 {
     if(hdware->humidity() < stngs->getMinHumidity())
@@ -21,4 +15,20 @@ void HerbsHandlerSimpl::handleHerbs()
             hdware->turnPumpOff();
             delay_s(stngs->getWaitTimeAfterpump());
         }
+}
+
+
+void HerbsHandlerSimpl::setMode(PolivMode)
+{
+    // TODO
+}
+
+PolivMode HerbsHandlerSimpl::getPolivMode()
+{
+    // TODO
+}
+
+PolivStage HerbsHandlerSimpl::getStatus()
+{
+    // TODO
 }

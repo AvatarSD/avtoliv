@@ -20,6 +20,18 @@
 //default instance for first-time program
 #define I2C_SLAVE_ADDRESS 0x15
 
+enum PolivStage {
+    WaitForMinHumidity,
+    PumpOn,
+    AfterPumpWait
+};
+enum PolivMode {
+    ManualOff = 0,
+    ManualOn = 1,
+    Auto = 2
+};
+
+
 class IHerbsHandler
 {
 public:
@@ -34,7 +46,9 @@ public:
 class IPolivControl
 {
 public:
-    virtual void setMode();
+    virtual void setMode(PolivMode);
+    virtual PolivMode getPolivMode();
+    virtual PolivStage getStatus();
 };
 
 class IPolivSettingsExt
