@@ -40,7 +40,7 @@ void PolivSettings::setWaitTimeAfterpump(const uint16_t & value)
 
 uint8_t PolivSettings::getHumidity(uint8_t pos) const
 {
-
+    return 0;
 }
 
 void PolivSettings::setHumidity(uint8_t value, uint8_t pos)
@@ -50,7 +50,7 @@ void PolivSettings::setHumidity(uint8_t value, uint8_t pos)
 
 uint8_t PolivSettings::getMinHumidity(uint8_t pos) const
 {
-
+    return 0;
 }
 
 void PolivSettings::setMinHumidity(uint8_t value, uint8_t pos)
@@ -60,7 +60,7 @@ void PolivSettings::setMinHumidity(uint8_t value, uint8_t pos)
 
 uint8_t PolivSettings::getMaxHumidity(uint8_t pos) const
 {
-
+    return 0;
 }
 
 void PolivSettings::setMaxHumidity(uint8_t value, uint8_t pos)
@@ -70,7 +70,7 @@ void PolivSettings::setMaxHumidity(uint8_t value, uint8_t pos)
 
 uint8_t PolivSettings::getMinPumpOnTime(uint8_t pos) const
 {
-
+    return 0;
 }
 
 void PolivSettings::setMinPumpOnTime(uint8_t value, uint8_t pos)
@@ -80,7 +80,7 @@ void PolivSettings::setMinPumpOnTime(uint8_t value, uint8_t pos)
 
 uint8_t PolivSettings::getWaitTimeAfterpump(uint8_t pos) const
 {
-
+    return 0;
 }
 
 void PolivSettings::setWaitTimeAfterpump(uint8_t value, uint8_t pos)
@@ -106,6 +106,16 @@ uint16_t PolivSettings::getMaxHumidity() const
 void PolivSettings::setMaxHumidity(const uint16_t & value)
 {
     eeprom_write_word(&backstagemem::maxHumidity , value);
+}
+
+uint16_t PolivSettings::getHumidity() const
+{
+    return 0;
+}
+
+void PolivSettings::setHumidity(const uint16_t & value)
+{
+
 }
 
 uint16_t PolivSettings::getMinHumidity() const
