@@ -6,7 +6,8 @@
 #include <herbshandlersimpl.h>
 
 
-
+// here is a default one
+#define MULTICAST_ADDR 0x30
 
 int main()
 {
@@ -16,11 +17,12 @@ int main()
 
     PolivSettings settings;
     HerbsHandlerSimpl herbshandler(hardware, &settings);
-    MappedMemory memory(&settings, &herbshandler);
 
-    UsiTwiSlave network(USI::instance());
+    UsiTwiSlave network(USI::instance(), MULTICAST_ADDR);
+    MappedMemory memory(&settings, &herbshandler, &network);
+
     I2CSlaveServer server(&network, &memory);
-    network.init(settings.getI2cAddress(), MULTICAST_ADDR);
+    network.init(settings.getI2cAddress());
 
     sei();
     hardware->turnLedOn();
@@ -32,5 +34,3 @@ int main()
 
     return 0;
 }
-
-

@@ -14,9 +14,6 @@
 #define DEV_SW_VER VER(0, 5)
 #define DEV_HW_VER VER(0, 1)
 
-// here is a default one
-#define MULTICAST_ADDR 0x50
-
 //default instance for first-time program
 #define I2C_SLAVE_ADDRESS 0x15
 
