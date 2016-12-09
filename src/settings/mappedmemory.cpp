@@ -159,10 +159,10 @@ public:
 };
 
 //todo: repair
-//typedef SlaveAddress<&servr, &servr, &settng> MySlaveAddrr;
+typedef SlaveAddress<servr, servr, settng> MySlaveAddrr;
 
 class CommonShared : public
-    Composite<GUID, DeviceName, DeviceSWver, DeviceHWver/*, MySlaveAddrr*/> {};
+    Composite<GUID, DeviceName, DeviceSWver, DeviceHWver, MySlaveAddrr> {};
 
 class MainMemoryMap : public Composite<CommonShared,
     Humidity, MaxHumidity, MinHumidity, PumpOnTime, AfterpumpWait> {};
