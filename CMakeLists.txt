@@ -26,11 +26,11 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flags}")
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/src/
 	${CMAKE_CURRENT_SOURCE_DIR}/src/hwiface/
-	${CMAKE_CURRENT_SOURCE_DIR}/src/net/
+	${CMAKE_CURRENT_SOURCE_DIR}/src/settings/
 	${CMAKE_CURRENT_SOURCE_DIR}/src/net/I2C/
 	${CMAKE_CURRENT_SOURCE_DIR}/src/net/server/
-	${CMAKE_CURRENT_SOURCE_DIR}/src/settings/
-	${CMAKE_CURRENT_SOURCE_DIR}/src/net/polymorphmemory)
+	${CMAKE_CURRENT_SOURCE_DIR}/src/net/polymorphmemory
+	${CMAKE_CURRENT_SOURCE_DIR}/src/net/slaveAddressCell)
 
 file(GLOB_RECURSE EXE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
 add_executable(${PROJECT_NAME} ${EXE_SRC})

@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 #include <util/delay.h>
+#include <usiTwiSlave.h>
 
 #define VER(MAJOR, MINOR) ((MAJOR << 8)|(MINOR))
 
@@ -48,7 +49,7 @@ public:
     virtual PolivStage getStatus();
 };
 
-class IPolivSettingsExt
+class IPolivSettingsExt: public ISlaveAddress
 {
 public:
     virtual uint8_t getHumidity(uint8_t pos) const;
@@ -67,8 +68,8 @@ public:
     virtual void setWaitTimeAfterpump(uint8_t value, uint8_t pos);
 
 
-    virtual uint8_t getI2cAddress() const;
-    virtual void setI2cAddress(uint8_t newAddr);
+    virtual uint8_t getAddress() const;
+    virtual void setAddress(uint8_t newAddr);
 
     virtual uint8_t getGUID(uint8_t pos) const;
     virtual uint8_t getDeviceName(uint8_t pos) const;
@@ -76,7 +77,7 @@ public:
     virtual uint8_t getDeviceHWver(uint8_t pos) const;
 };
 
-class IPolivSettingsInt
+class IPolivSettingsInt : public ISlaveAddress
 {
 public:
     virtual uint16_t getHumidity() const;
@@ -95,8 +96,8 @@ public:
     virtual void setWaitTimeAfterpump(const uint16_t & value);
 
 
-    virtual uint8_t getI2cAddress() const;
-    virtual void setI2cAddress(uint8_t newAddr);
+    virtual uint8_t getAddress() const;
+    virtual void setAddress(uint8_t newAddr);
 };
 
 class PolivSettings : public IPolivSettingsInt, public IPolivSettingsExt
@@ -134,8 +135,8 @@ public:
     void setWaitTimeAfterpump(uint8_t value, uint8_t pos);
 
 
-    uint8_t getI2cAddress() const;
-    void setI2cAddress(uint8_t newAddr);
+    uint8_t getAddress() const;
+    void setAddress(uint8_t newAddr);
 
     uint8_t getGUID(uint8_t pos) const;
     uint8_t getDeviceName(uint8_t pos) const;

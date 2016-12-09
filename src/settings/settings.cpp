@@ -128,12 +128,12 @@ void PolivSettings::setMinHumidity(const uint16_t & value)
     eeprom_write_word(&backstagemem::minHumidity, value);
 }
 
-void PolivSettings::setI2cAddress(uint8_t addr)
+void PolivSettings::setAddress(uint8_t addr)
 {
     eeprom_write_byte(&backstagemem::slaveAddress, addr);
 }
 
-uint8_t PolivSettings::getI2cAddress() const
+uint8_t PolivSettings::getAddress() const
 {
     return eeprom_read_byte(&backstagemem::slaveAddress);
 }

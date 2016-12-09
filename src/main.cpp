@@ -22,7 +22,7 @@ int main()
     MappedMemory memory(&settings, &herbshandler, &network);
 
     I2CSlaveServer server(&network, &memory);
-    network.init(settings.getI2cAddress());
+    network.init(settings.getAddress());
 
     sei();
     hardware->turnLedOn();
