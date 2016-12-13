@@ -9,14 +9,17 @@ class MappedMemory : public IMappedMemory
 {
 public:
     MappedMemory(IPolivSettingsExt * settings, IPolivControl * control,
-                 ITwiSlave * server);
+                 ITwiSlave * server, IMulticastAddress * iaddr);
 
     int8_t write(uint8_t addr, uint8_t data);
     int16_t read(uint8_t addr);
     uint16_t mapsize();
 
-    //private:
-    //    PolivSettings * settings;
+
+    static IPolivSettingsExt * settng;
+    static IPolivControl * ctrl;
+    static ITwiSlave * servr;
+    static IMulticastAddress * mcastAdr;
 
 };
 

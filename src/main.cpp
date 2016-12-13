@@ -19,7 +19,7 @@ int main()
     HerbsHandlerSimpl herbshandler(hardware, &settings);
 
     UsiTwiSlave network(USI::instance(), MULTICAST_ADDR);
-    MappedMemory memory(&settings, &herbshandler, &network);
+    MappedMemory memory(&settings, &herbshandler, &network, &network);
 
     I2CSlaveServer server(&network, &memory);
     network.init(settings.getAddress());

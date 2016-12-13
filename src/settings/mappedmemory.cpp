@@ -37,9 +37,8 @@
 #include <settings.h>
 #include <slaveaddres.h>
 
-IPolivSettingsExt * settng = nullptr;
-IPolivControl * ctrl = nullptr;
-ITwiSlave * servr = nullptr;
+
+
 
 
 
@@ -82,84 +81,127 @@ public:
 class DeviceHWver : public Composite<uint16_t>
 {
 public:
-    static Error write(Address addr, uint8_t data, Num num)
+    DeviceHWver(IPolivSettingsExt * setting) : settng(setting) {}
+
+    Error write(Address addr, uint8_t data, Num num)
     {
         return OK;
     }
-    static ReadType read(Address addr, Num num = 0)
+    ReadType read(Address addr, Num num = 0)
     {
         return settng->getDeviceHWver(addr);
     }
+
+private:
+    IPolivSettingsExt * settng;
 };
 
 class Humidity : public Composite<uint16_t>
 {
 public:
-    static Error write(Address addr, uint8_t data, Num num)
+    Humidity(IPolivSettingsExt * setting) : settng(setting) {}
+
+    Error write(Address addr, uint8_t data, Num num)
     {
         settng->setHumidity(data, addr);
         return OK;
     }
-    static ReadType read(Address addr, Num num = 0)
+    ReadType read(Address addr, Num num = 0)
     {
         return settng->getHumidity(addr);
     }
+
+private:
+    IPolivSettingsExt * settng;
 };
 class MaxHumidity : public Composite<uint16_t>
 {
 public:
-    static Error write(Address addr, uint8_t data, Num num)
+    MaxHumidity(IPolivSettingsExt * setting) : settng(setting) {}
+    Error write(Address addr, uint8_t data, Num num)
     {
         settng->setMaxHumidity(data, addr);
         return OK;
     }
-    static ReadType read(Address addr, Num num = 0)
+    ReadType read(Address addr, Num num = 0)
     {
         return settng->getMaxHumidity(addr);
     }
+
+private:
+    IPolivSettingsExt * settng;
 };
 class MinHumidity : public Composite<uint16_t>
 {
 public:
-    static Error write(Address addr, uint8_t data, Num num)
+    MinHumidity(IPolivSettingsExt * setting) : settng(setting) {}
+
+    Error write(Address addr, uint8_t data, Num num)
     {
         settng->setMinHumidity(data, addr);
         return OK;
     }
-    static ReadType read(Address addr, Num num = 0)
+    ReadType read(Address addr, Num num = 0)
     {
         return settng->getMinHumidity(addr);
     }
+
+private:
+    IPolivSettingsExt * settng;
 };
 class AfterpumpWait : public Composite<uint16_t>
 {
 public:
-    static Error write(Address addr, uint8_t data, Num num)
+    AfterpumpWait(IPolivSettingsExt * setting) : settng(setting) {}
+
+    Error write(Address addr, uint8_t data, Num num)
     {
         settng->setWaitTimeAfterpump(data, addr);
         return OK;
     }
-    static ReadType read(Address addr, Num num = 0)
+    ReadType read(Address addr, Num num = 0)
     {
         return settng->getWaitTimeAfterpump(addr);
     }
+
+private:
+    IPolivSettingsExt * settng;
 };
 class PumpOnTime : public Composite<uint16_t>
 {
 public:
-    static Error write(Address addr, uint8_t data, Num num)
+    PumpOnTime(IPolivSettingsExt * settng) : settng(setting) {}
+
+    Error write(Address addr, uint8_t data, Num num)
     {
         settng->setMinPumpOnTime(data, addr);
         return OK;
     }
-    static ReadType read(Address addr, Num num = 0)
+    ReadType read(Address addr, Num num = 0)
     {
         return settng->getMinPumpOnTime(addr);
     }
+
+private:
+    IPolivSettingsExt * settng;
 };
 
-//todo: repair
-typedef SlaveAddress<servr, servr, settng> MySlaveAddrr;
+
+
+
+
+
+
+
+
+
+
+//todo: repair; make static method in adresskeeper to set  the variable;
+
+//AddressKeeper::setAddress(MappedMemory::mcastAdr, MappedMemory::servr,
+//                          MappedMemory::settng);
+typedef SlaveAddress<MappedMemory::mcastAdr, MappedMemory::servr, MappedMemory::settng>
+MySlaveAddrr;
 
 class CommonShared : public
     Composite<GUID, DeviceName, DeviceSWver, DeviceHWver, MySlaveAddrr> {};
@@ -167,25 +209,28 @@ class CommonShared : public
 class MainMemoryMap : public Composite<CommonShared,
     Humidity, MaxHumidity, MinHumidity, PumpOnTime, AfterpumpWait> {};
 
-typedef MainMemoryMap Map;
+
+MainMemoryMap map;
 
 MappedMemory::MappedMemory(IPolivSettingsExt * settings,
                            IPolivControl * control,
-                           ITwiSlave * server)
+                           ITwiSlave * server,
+                           IMulticastAddress * iaddr)
 {
     settng = settings;
     ctrl = control;
     servr = server;
+    mcastAdr = iaddr;
 }
 int8_t MappedMemory::write(uint8_t addr, uint8_t data)
 {
-    return Map::write(addr, data);
+    return map.write(addr, data);
 }
 int16_t MappedMemory::read(uint8_t addr)
 {
-    return Map::read(addr);
+    return map.read(addr);
 }
 uint16_t MappedMemory::mapsize()
 {
-    return sizeof(Map);
+    return map.size();
 }
