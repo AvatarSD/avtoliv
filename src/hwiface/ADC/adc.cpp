@@ -22,10 +22,6 @@ void Analog::init()
 
 uint16_t Analog::read(uint8_t pin)
 {
-    uint16_t ret = 0;
-
-    cli();
-
     // mux to selected pin
     ADMUX = (pin & 0b00001111);
 
@@ -38,10 +34,6 @@ uint16_t Analog::read(uint8_t pin)
     //wait end of conversion
     while(!(ADCSRA & _BV(ADIF)));
 
-    ret = ADCW;
-
-    sei();
-
     // read the result
-    return ret;
+    return ADCW;
 }

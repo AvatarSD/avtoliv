@@ -107,7 +107,7 @@ public:
         if(addr == 0)
             hum = ctrl->getHumidity(num);
 
-        return (uint8_t)((hum >> 8 * addr) & 0xff);
+        return (uint8_t)((hum >> (8 * addr)) & 0xff);
     }
 };
 class MaxHumidity : public Composite<uint16_t>
