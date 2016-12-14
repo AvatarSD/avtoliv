@@ -13,7 +13,7 @@
 
 //poliv
 #define DEV_NAME {'a', 'p', 'l', 'v'}
-#define DEV_SW_VER VER(0, 5)
+#define DEV_SW_VER VER(1, 0)
 #define DEV_HW_VER VER(0, 1)
 
 //default instance for first-time program
