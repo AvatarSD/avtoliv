@@ -52,42 +52,75 @@ void PolivSettings::setMode(PolivMode mode)
 
 uint8_t PolivSettings::getMinHumidity(uint8_t pos) const
 {
-    return 0;// TODO
+    static uint16_t tmp = 0;
+    if(pos == 0)
+        tmp = eeprom_read_word(&backstagemem::minHumidity);
+    return (uint8_t)((tmp >> 8 * pos) & 0xff);
+
 }
 
 void PolivSettings::setMinHumidity(uint8_t value, uint8_t pos)
 {
-    // TODO
+    static uint16_t tmp = 0;
+    ((uint8_t *) * (&tmp))[pos] = value;
+    if(pos == 1) {
+        eeprom_write_word(&backstagemem::minHumidity, tmp);
+        tmp = 0;
+    }
 }
 
 uint8_t PolivSettings::getMaxHumidity(uint8_t pos) const
 {
-    return 0;// TODO
+    static uint16_t tmp = 0;
+    if(pos == 0)
+        tmp = eeprom_read_word(&backstagemem::maxHumidity);
+    return (uint8_t)((tmp >> 8 * pos) & 0xff);
 }
 
 void PolivSettings::setMaxHumidity(uint8_t value, uint8_t pos)
 {
-    // TODO
+    static uint16_t tmp = 0;
+    ((uint8_t *) * (&tmp))[pos] = value;
+    if(pos == 1) {
+        eeprom_write_word(&backstagemem::maxHumidity, tmp);
+        tmp = 0;
+    }
 }
 
 uint8_t PolivSettings::getMinPumpOnTime(uint8_t pos) const
 {
-    return 0;// TODO
+    static uint16_t tmp = 0;
+    if(pos == 0)
+        tmp = eeprom_read_word(&backstagemem::minPumpOnTime);
+    return (uint8_t)((tmp >> 8 * pos) & 0xff);
 }
 
 void PolivSettings::setMinPumpOnTime(uint8_t value, uint8_t pos)
 {
-    // TODO
+    static uint16_t tmp = 0;
+    ((uint8_t *) * (&tmp))[pos] = value;
+    if(pos == 1) {
+        eeprom_write_word(&backstagemem::minPumpOnTime, tmp);
+        tmp = 0;
+    }
 }
 
 uint8_t PolivSettings::getWaitTimeAfterpump(uint8_t pos) const
 {
-    return 0;// TODO
+    static uint16_t tmp = 0;
+    if(pos == 0)
+        tmp = eeprom_read_word(&backstagemem::waitTimeAfterpump);
+    return (uint8_t)((tmp >> 8 * pos) & 0xff);
 }
 
 void PolivSettings::setWaitTimeAfterpump(uint8_t value, uint8_t pos)
 {
-    // TODO
+    static uint16_t tmp = 0;
+    ((uint8_t *) * (&tmp))[pos] = value;
+    if(pos == 1) {
+        eeprom_write_word(&backstagemem::waitTimeAfterpump, tmp);
+        tmp = 0;
+    }
 }
 
 uint8_t PolivSettings::getMode() const
