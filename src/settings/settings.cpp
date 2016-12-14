@@ -42,12 +42,12 @@ void PolivSettings::setWaitTimeAfterpump(const uint16_t & value)
 
 PolivMode PolivSettings::getMode()
 {
-    return Auto;//TODO
+    return (PolivMode)eeprom_read_byte(&backstagemem::polivMode);
 }
 
 void PolivSettings::setMode(PolivMode mode)
 {
-    //TODO
+    eeprom_write_byte(&backstagemem::polivMode, (uint8_t)mode);
 }
 
 uint8_t PolivSettings::getHumidity(uint8_t pos) const
@@ -102,12 +102,12 @@ void PolivSettings::setWaitTimeAfterpump(uint8_t value, uint8_t pos)
 
 uint8_t PolivSettings::getMode() const
 {
-    return 0;//TODO
+    return eeprom_read_byte(&backstagemem::polivMode);
 }
 
 void PolivSettings::setMode(uint8_t mode)
 {
-    //TODO
+    eeprom_write_byte(&backstagemem::polivMode, mode);
 }
 
 uint16_t PolivSettings::getMinPumpOnTime() const
