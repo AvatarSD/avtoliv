@@ -8,27 +8,32 @@ HerbsHandlerSimpl::HerbsHandlerSimpl(HWiface * hardware,
 
 void HerbsHandlerSimpl::handleHerbs()
 {
-    if(hdware->humidity() < stngs->getMinHumidity())
-        while(hdware->humidity() < stngs->getMaxHumidity()) {
-            hdware->turnPumpOn();
-            delay_s(stngs->getMinPumpOnTime());
-            hdware->turnPumpOff();
-            delay_s(stngs->getWaitTimeAfterpump());
-        }
+    if(mode == PolivMode::Auto)
+        if(hdware->humidity() < stngs->getMinHumidity())
+            while(hdware->humidity() < stngs->getMaxHumidity()) {
+                hdware->turnPumpOn();
+                delay_s(stngs->getMinPumpOnTime());
+                hdware->turnPumpOff();
+                delay_s(stngs->getWaitTimeAfterpump());
+            }
 }
 
 
-void HerbsHandlerSimpl::setMode(PolivMode)
+void HerbsHandlerSimpl::setMode(PolivMode mode)
 {
-    // TODO
+    this->mode = mode;
+    if(mode == PolivMode::ManualOn)
+        hdware->turnPumpOn();
+    else if(mode == PolivMode::ManualOff)
+        hdware->turnPumpOff();
 }
 
 PolivMode HerbsHandlerSimpl::getPolivMode()
 {
-    // TODO
+    return this->mode;
 }
 
 PolivStage HerbsHandlerSimpl::getStatus()
 {
-    // TODO
+    return this->stage;
 }
