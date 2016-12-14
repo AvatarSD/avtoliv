@@ -11,12 +11,19 @@
 #define GUID_SIZE 16
 #define DEVNAME_SIZE 4
 
+//poliv
 #define DEV_NAME {'a', 'p', 'l', 'v'}
 #define DEV_SW_VER VER(0, 5)
 #define DEV_HW_VER VER(0, 1)
 
 //default instance for first-time program
 #define I2C_SLAVE_ADDRESS 0x15
+#define DEFAULT_MODE PolivMode::Auto
+#define DEFAULT_MINHUMODITY 350
+#define DEFAULT_MAXHUMODITY 700
+#define DEFAULT_PUMPTIME 4
+#define DEFAULT_AFTERPUMPTIME 120
+
 
 enum PolivStage {
     WaitForMinHumidity,

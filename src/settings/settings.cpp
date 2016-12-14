@@ -19,10 +19,12 @@ const uint16_t deviceSWver = DEV_SW_VER;
 uint8_t EEMEM slaveAddress = I2C_SLAVE_ADDRESS;
 
 
-uint16_t EEMEM minHumidity = 350;
-uint16_t EEMEM maxHumidity = 700;
-uint16_t EEMEM minPumpOnTime = 4;
-uint16_t EEMEM waitTimeAfterpump = 120;
+uint16_t EEMEM minHumidity = DEFAULT_MINHUMODITY;
+uint16_t EEMEM maxHumidity = DEFAULT_MAXHUMODITY;
+uint16_t EEMEM minPumpOnTime = DEFAULT_PUMPTIME;
+uint16_t EEMEM waitTimeAfterpump = DEFAULT_AFTERPUMPTIME;
+
+uint8_t EEMEM polivMode = DEFAULT_MODE;
 
 }
 
