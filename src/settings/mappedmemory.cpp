@@ -158,13 +158,37 @@ public:
         return settng->getMinPumpOnTime(addr);
     }
 };
-
+class PumpMode : public Composite<uint8_t>
+{
+public:
+    static Error write(Address addr, uint8_t data, Num num)
+    {
+        ctrl->setMode((PolivMode)data);
+        return OK;
+    }
+    static ReadType read(Address addr, Num num = 0)
+    {
+        return (uint8_t)ctrl->getPolivMode();
+    }
+};
+class PolivStatus : public Composite<uint8_t>
+{
+public:
+    static Error write(Address addr, uint8_t data, Num num)
+    {
+        return OK;
+    }
+    static ReadType read(Address addr, Num num = 0)
+    {
+        return (uint8_t)ctrl->getStatus();
+    }
+};
 
 class CommonShared : public
     Composite<GUID, DeviceName, DeviceSWver, DeviceHWver, SlaveAddress<1>> {};
 
 class MainMemoryMap : public Composite<CommonShared,
-    Humidity, MaxHumidity, MinHumidity, PumpOnTime, AfterpumpWait> {};
+    Humidity, MaxHumidity, MinHumidity, PumpOnTime, AfterpumpWait, PolivStatus, PumpMode> {};
 
 typedef MainMemoryMap Map;
 
