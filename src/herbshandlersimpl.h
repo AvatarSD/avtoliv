@@ -4,7 +4,7 @@
 #include <settings.h>
 #include <hwiface.h>
 
-class HerbsHandlerSimpl : public IHerbsHandler, public IPolivControl
+class  HerbsHandlerSimpl : public IHerbsHandler, public IPolivControl
 {
 public:
     HerbsHandlerSimpl(HWiface * hardware,
@@ -17,11 +17,11 @@ public:
     void setMode(PolivMode);
     PolivMode getPolivMode();
     PolivStage getStatus();
+    uint16_t getHumidity(uint8_t);
 
 private:
     HWiface * hdware;
     IPolivSettingsInt * stngs;
-
     PolivStage stage;
 
 };

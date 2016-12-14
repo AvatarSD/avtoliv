@@ -98,12 +98,16 @@ class Humidity : public Composite<uint16_t>
 public:
     static Error write(Address addr, uint8_t data, Num num)
     {
-        settng->setHumidity(data, addr);
         return OK;
     }
     static ReadType read(Address addr, Num num = 0)
     {
-        return settng->getHumidity(addr);
+        static uint16_t hum = 0;
+
+        if(addr == 0)
+            hum = ctrl->getHumidity(num);
+
+        return (uint8_t)((hum >> 8 * addr) & 0xff);
     }
 };
 class MaxHumidity : public Composite<uint16_t>

@@ -46,3 +46,9 @@ PolivStage HerbsHandlerSimpl::getStatus()
 {
     return this->stage;
 }
+
+
+uint16_t HerbsHandlerSimpl::getHumidity(uint8_t)
+{
+    return hdware->humidity();
+}

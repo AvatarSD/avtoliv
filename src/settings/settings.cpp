@@ -50,16 +50,6 @@ void PolivSettings::setMode(PolivMode mode)
     eeprom_write_byte(&backstagemem::polivMode, (uint8_t)mode);
 }
 
-uint8_t PolivSettings::getHumidity(uint8_t pos) const
-{
-    return 0; // TODO
-}
-
-void PolivSettings::setHumidity(uint8_t value, uint8_t pos)
-{
-    // TODO
-}
-
 uint8_t PolivSettings::getMinHumidity(uint8_t pos) const
 {
     return 0;// TODO
@@ -128,16 +118,6 @@ uint16_t PolivSettings::getMaxHumidity() const
 void PolivSettings::setMaxHumidity(const uint16_t & value)
 {
     eeprom_write_word(&backstagemem::maxHumidity , value);
-}
-
-uint16_t PolivSettings::getHumidity() const
-{
-    return 0;// TODO
-}
-
-void PolivSettings::setHumidity(const uint16_t & value)
-{
-    // TODO
 }
 
 uint16_t PolivSettings::getMinHumidity() const

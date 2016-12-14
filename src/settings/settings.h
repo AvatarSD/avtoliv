@@ -54,14 +54,12 @@ public:
     virtual void setMode(PolivMode);
     virtual PolivMode getPolivMode();
     virtual PolivStage getStatus();
+    virtual uint16_t getHumidity(uint8_t);
 };
 
 class IPolivSettingsExt: public ISlaveAddress
 {
 public:
-    virtual uint8_t getHumidity(uint8_t pos) const;
-    virtual void setHumidity(uint8_t value, uint8_t pos);
-
     virtual uint8_t getMinHumidity(uint8_t pos) const;
     virtual void setMinHumidity(uint8_t value, uint8_t pos);
 
@@ -89,9 +87,6 @@ public:
 class IPolivSettingsInt : public ISlaveAddress
 {
 public:
-    virtual uint16_t getHumidity() const;
-    virtual void setHumidity(const uint16_t & value);
-
     virtual uint16_t getMinHumidity() const;
     virtual void setMinHumidity(const uint16_t & value);
 
@@ -133,10 +128,6 @@ public:
     PolivMode getMode();
     void setMode(PolivMode mode);
 
-
-
-    uint8_t getHumidity(uint8_t pos) const;
-    void setHumidity(uint8_t value, uint8_t pos);
 
     uint8_t getMinHumidity(uint8_t pos) const;
     void setMinHumidity(uint8_t value, uint8_t pos);

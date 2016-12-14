@@ -14,26 +14,34 @@
 
 void Analog::init()
 {
-	ADCSRA = _BV(ADEN);
-	ADMUX= 0;
-	ADCSRB = 0;
-	DIDR0 = 0;
+    ADCSRA = _BV(ADEN);
+    ADMUX = 0;
+    ADCSRB = 0;
+    DIDR0 = 0;
 }
 
 uint16_t Analog::read(uint8_t pin)
 {
-	// mux to selected pin
-	ADMUX = (pin & 0b00001111);
+    uint16_t ret = 0;
 
-	// Delay needed for the stabilization of the ADC input voltage
-	_delay_us(2);
+    cli();
 
-	// Start the AD conversion
-	ADCSRA|=_BV(ADSC);
+    // mux to selected pin
+    ADMUX = (pin & 0b00001111);
 
-	//wait end of conversion
-	while(!(ADCSRA&_BV(ADIF)));
+    // Delay needed for the stabilization of the ADC input voltage
+    _delay_us(2);
 
-	// read the result
-	return ADCW;
+    // Start the AD conversion
+    ADCSRA |= _BV(ADSC);
+
+    //wait end of conversion
+    while(!(ADCSRA & _BV(ADIF)));
+
+    ret = ADCW;
+
+    sei();
+
+    // read the result
+    return ret;
 }
