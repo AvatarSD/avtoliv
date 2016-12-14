@@ -67,6 +67,8 @@ public:
     virtual uint8_t getWaitTimeAfterpump(uint8_t pos) const;
     virtual void setWaitTimeAfterpump(uint8_t value, uint8_t pos);
 
+    virtual uint8_t getMode() const;
+    virtual void setMode(uint8_t mode);
 
     virtual uint8_t getAddress() const;
     virtual void setAddress(uint8_t newAddr);
@@ -95,6 +97,9 @@ public:
     virtual uint16_t getWaitTimeAfterpump() const;
     virtual void setWaitTimeAfterpump(const uint16_t & value);
 
+    virtual PolivMode getMode();
+    virtual void setMode(PolivMode mode);
+
 
     virtual uint8_t getAddress() const;
     virtual void setAddress(uint8_t newAddr);
@@ -118,6 +123,10 @@ public:
     uint16_t getWaitTimeAfterpump() const;
     void setWaitTimeAfterpump(const uint16_t & value);
 
+    PolivMode getMode();
+    void setMode(PolivMode mode);
+
+
 
     uint8_t getHumidity(uint8_t pos) const;
     void setHumidity(uint8_t value, uint8_t pos);
@@ -133,6 +142,9 @@ public:
 
     uint8_t getWaitTimeAfterpump(uint8_t pos) const;
     void setWaitTimeAfterpump(uint8_t value, uint8_t pos);
+
+    uint8_t getMode() const;
+    void setMode(uint8_t mode);
 
 
     uint8_t getAddress() const;

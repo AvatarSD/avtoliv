@@ -38,6 +38,16 @@ void PolivSettings::setWaitTimeAfterpump(const uint16_t & value)
     eeprom_write_word(&backstagemem::waitTimeAfterpump, value);
 }
 
+PolivMode PolivSettings::getMode()
+{
+    return Auto;//TODO
+}
+
+void PolivSettings::setMode(PolivMode mode)
+{
+    //TODO
+}
+
 uint8_t PolivSettings::getHumidity(uint8_t pos) const
 {
     return 0; // TODO
@@ -86,6 +96,16 @@ uint8_t PolivSettings::getWaitTimeAfterpump(uint8_t pos) const
 void PolivSettings::setWaitTimeAfterpump(uint8_t value, uint8_t pos)
 {
     // TODO
+}
+
+uint8_t PolivSettings::getMode() const
+{
+    return 0;//TODO
+}
+
+void PolivSettings::setMode(uint8_t mode)
+{
+    //TODO
 }
 
 uint16_t PolivSettings::getMinPumpOnTime() const

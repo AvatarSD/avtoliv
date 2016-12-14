@@ -22,7 +22,6 @@ private:
     HWiface * hdware;
     IPolivSettingsInt * stngs;
 
-    PolivMode mode;
     PolivStage stage;
 
 };
