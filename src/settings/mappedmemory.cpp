@@ -40,6 +40,7 @@
 IPolivSettingsExt * settng = nullptr;
 IPolivControl * ctrl = nullptr;
 ITwiSlave * servr = nullptr;
+IMulticastAddress * multicastIface = nullptr;
 
 
 
@@ -158,11 +159,9 @@ public:
     }
 };
 
-//todo: repair
-typedef SlaveAddress<servr, servr, settng> MySlaveAddrr;
 
 class CommonShared : public
-    Composite<GUID, DeviceName, DeviceSWver, DeviceHWver, MySlaveAddrr> {};
+    Composite<GUID, DeviceName, DeviceSWver, DeviceHWver, SlaveAddress<1>> {};
 
 class MainMemoryMap : public Composite<CommonShared,
     Humidity, MaxHumidity, MinHumidity, PumpOnTime, AfterpumpWait> {};
@@ -176,6 +175,7 @@ MappedMemory::MappedMemory(IPolivSettingsExt * settings,
     settng = settings;
     ctrl = control;
     servr = server;
+    SlaveAddress<1>::setAddreses(server, server, settings);
 }
 int8_t MappedMemory::write(uint8_t addr, uint8_t data)
 {
