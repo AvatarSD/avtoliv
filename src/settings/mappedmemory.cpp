@@ -37,12 +37,10 @@
 #include <settings.h>
 #include <slaveaddres.h>
 
-IPolivSettingsExt * settng = nullptr;
-IPolivControl * ctrl = nullptr;
-ITwiSlave * servr = nullptr;
-IMulticastAddress * multicastIface = nullptr;
-
-
+IPolivSettingsExt * settng = nullptr; /* settings in eeprom */
+IPolivControl * ctrl = nullptr;       /* main poliv iface   */
+ITwiSlave * servr = nullptr;          /* server pointer to
+                                         change address     */
 
 class GUID : public Composite<uint8_t[GUID_SIZE]>
 {
@@ -53,7 +51,7 @@ public:
     }
     static ReadType read(Address addr, Num num)
     {
-        return settng->getGUID(addr);
+        return settng->getDeviceGUID(addr);
     }
 };
 class DeviceName : public Composite<uint8_t[DEVNAME_SIZE]>
@@ -188,14 +186,33 @@ public:
     }
 };
 
+class _res_ : public Composite<uint8_t[RESERVED_SIZE]>
+{
+public:
+    static Error write(Address addr, uint8_t data, Num num)
+    {
+        return OK;
+    }
+    static ReadType read(Address addr, Num num = 0)
+    {
+        return 0x00;
+    }
+};
+
 class CommonShared : public
     Composite<GUID, DeviceName, DeviceSWver, DeviceHWver, SlaveAddress<1>> {};
 
-class MainMemoryMap : public Composite<CommonShared,
-    Humidity, MaxHumidity, MinHumidity, PumpOnTime, AfterpumpWait, PolivStatus, PumpMode> {};
+class PolivShared : public
+    Composite<Humidity, MaxHumidity, MinHumidity, PumpOnTime,
+    AfterpumpWait, PolivStatus, PumpMode> {};
 
-typedef MainMemoryMap Map;
 
+class MainMem : public
+    Composite<CommonShared, PolivShared, _res_> {};
+
+static_assert(sizeof(MainMem) == 256, "MainMen is not 256bytes in size");
+
+typedef MainMem MemoryMammer;
 MappedMemory::MappedMemory(IPolivSettingsExt * settings,
                            IPolivControl * control,
                            ITwiSlave * server)
@@ -203,17 +220,17 @@ MappedMemory::MappedMemory(IPolivSettingsExt * settings,
     settng = settings;
     ctrl = control;
     servr = server;
-    SlaveAddress<1>::setAddreses(server, server, settings);
+    SlaveAddress<1>::setAddreses(server, settings);
 }
 int8_t MappedMemory::write(uint8_t addr, uint8_t data)
 {
-    return Map::write(addr, data);
+    return MemoryMammer::write(addr, data);
 }
 int16_t MappedMemory::read(uint8_t addr)
 {
-    return Map::read(addr);
+    return MemoryMammer::read(addr);
 }
 uint16_t MappedMemory::mapsize()
 {
-    return sizeof(Map);
+    return sizeof(MemoryMammer);
 }

@@ -10,6 +10,7 @@
 // hardware defined settings
 #define GUID_SIZE 16
 #define DEVNAME_SIZE 4
+#define RESERVED_SIZE 219
 
 //poliv
 #define DEV_NAME {'a', 'p', 'l', 'v'}
@@ -78,7 +79,7 @@ public:
     virtual uint8_t getAddress() const;
     virtual void setAddress(uint8_t newAddr);
 
-    virtual uint8_t getGUID(uint8_t pos) const;
+    virtual uint8_t getDeviceGUID(uint8_t pos) const;
     virtual uint8_t getDeviceName(uint8_t pos) const;
     virtual uint8_t getDeviceSWver(uint8_t pos) const;
     virtual uint8_t getDeviceHWver(uint8_t pos) const;
@@ -148,7 +149,7 @@ public:
     uint8_t getAddress() const;
     void setAddress(uint8_t newAddr);
 
-    uint8_t getGUID(uint8_t pos) const;
+    uint8_t getDeviceGUID(uint8_t pos) const;
     uint8_t getDeviceName(uint8_t pos) const;
     uint8_t getDeviceSWver(uint8_t pos) const;
     uint8_t getDeviceHWver(uint8_t pos) const;

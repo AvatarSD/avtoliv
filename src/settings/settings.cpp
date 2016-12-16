@@ -173,7 +173,7 @@ uint8_t PolivSettings::getAddress() const
     return eeprom_read_byte(&backstagemem::slaveAddress);
 }
 
-uint8_t PolivSettings::getGUID(uint8_t pos) const
+uint8_t PolivSettings::getDeviceGUID(uint8_t pos) const
 {
     return eeprom_read_byte(&backstagemem::GUID[pos]);
 }
