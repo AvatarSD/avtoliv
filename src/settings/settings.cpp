@@ -15,179 +15,78 @@ uint8_t EEMEM deviceName[DEVNAME_SIZE] = DEV_NAME;
 uint16_t EEMEM deviceHWver = DEV_HW_VER;
 const uint16_t deviceSWver = DEV_SW_VER;
 
+HumidityVal EEMEM minHumidity = DEFAULT_MINHUMODITY;
+HumidityVal EEMEM maxHumidity = DEFAULT_MAXHUMODITY;
+TimeSecVal EEMEM minPumpOnTime = DEFAULT_PUMPTIME;
+TimeSecVal EEMEM waitTimeAfterpump = DEFAULT_AFTERPUMPTIME;
+DeviceMode EEMEM polivMode = DEFAULT_MODE;
 
-uint8_t EEMEM slaveAddress = I2C_SLAVE_ADDRESS;
-
-
-uint16_t EEMEM minHumidity = DEFAULT_MINHUMODITY;
-uint16_t EEMEM maxHumidity = DEFAULT_MAXHUMODITY;
-uint16_t EEMEM minPumpOnTime = DEFAULT_PUMPTIME;
-uint16_t EEMEM waitTimeAfterpump = DEFAULT_AFTERPUMPTIME;
-
-uint8_t EEMEM polivMode = DEFAULT_MODE;
-
+I2CAddress EEMEM slaveAddress = I2C_SLAVE_ADDRESS;
 }
 
 
-
-uint16_t PolivSettings::getWaitTimeAfterpump() const
+void PolivSettings::setMinHumidity(HumidityVal value)
 {
-    return eeprom_read_word(&backstagemem::waitTimeAfterpump);
+    eeprom_write_word(&backstagemem::minHumidity, (uint16_t)value);
+}
+void PolivSettings::setMaxHumidity(HumidityVal value)
+{
+    eeprom_write_word(&backstagemem::maxHumidity, (uint16_t)value);
+}
+void PolivSettings::setPumpOnTime(TimeSecVal value)
+{
+    eeprom_write_word(&backstagemem::minPumpOnTime, (uint16_t)value);
+}
+void PolivSettings::setAbsorbedTime(TimeSecVal value)
+{
+    eeprom_write_word(&backstagemem::waitTimeAfterpump, (uint16_t)value);
+}
+void PolivSettings::setDeviceMode(DeviceMode mode)
+{
+    eeprom_write_byte((uint8_t *)&backstagemem::polivMode, (uint8_t)mode);
+}
+void PolivSettings::setAddress(I2CAddress addr)
+{
+    eeprom_write_byte(&backstagemem::slaveAddress, (uint8_t)addr);
 }
 
-void PolivSettings::setWaitTimeAfterpump(const uint16_t & value)
+HumidityVal PolivSettings::getMinHumidity() const
 {
-    eeprom_write_word(&backstagemem::waitTimeAfterpump, value);
+    return (HumidityVal)eeprom_read_word(&backstagemem::minHumidity);
 }
-
-DeviceMode PolivSettings::getMode()
+HumidityVal PolivSettings::getMaxHumidity() const
 {
-    return (DeviceMode)eeprom_read_byte(&backstagemem::polivMode);
+    return (HumidityVal)eeprom_read_word(&backstagemem::maxHumidity);
 }
-
-void PolivSettings::setMode(DeviceMode mode)
+TimeSecVal PolivSettings::getPumpOnTime() const
 {
-    eeprom_write_byte(&backstagemem::polivMode, (uint8_t)mode);
+    return (TimeSecVal)eeprom_read_word(&backstagemem::minPumpOnTime);
 }
-
-uint8_t PolivSettings::getMinHumidity(uint8_t pos) const
+TimeSecVal PolivSettings::getAbsorbedTime() const
 {
-    static uint16_t tmp = 0;
-    if(pos == 0)
-        tmp = eeprom_read_word(&backstagemem::minHumidity);
-    return (uint8_t)((tmp >> 8 * pos) & 0xff);
-
+    return (TimeSecVal)eeprom_read_word(&backstagemem::waitTimeAfterpump);
 }
-
-void PolivSettings::setMinHumidity(uint8_t value, uint8_t pos)
+DeviceMode PolivSettings::getDeviceMode() const
 {
-    static uint16_t tmp = 0;
-    ((uint8_t *) * (&tmp))[pos] = value;
-    if(pos == 1) {
-        eeprom_write_word(&backstagemem::minHumidity, tmp);
-        tmp = 0;
-    }
+    return (DeviceMode)eeprom_read_byte((uint8_t *)&backstagemem::polivMode);
 }
-
-uint8_t PolivSettings::getMaxHumidity(uint8_t pos) const
+I2CAddress PolivSettings::getAddress() const
 {
-    static uint16_t tmp = 0;
-    if(pos == 0)
-        tmp = eeprom_read_word(&backstagemem::maxHumidity);
-    return (uint8_t)((tmp >> 8 * pos) & 0xff);
-}
-
-void PolivSettings::setMaxHumidity(uint8_t value, uint8_t pos)
-{
-    static uint16_t tmp = 0;
-    ((uint8_t *) * (&tmp))[pos] = value;
-    if(pos == 1) {
-        eeprom_write_word(&backstagemem::maxHumidity, tmp);
-        tmp = 0;
-    }
-}
-
-uint8_t PolivSettings::getMinPumpOnTime(uint8_t pos) const
-{
-    static uint16_t tmp = 0;
-    if(pos == 0)
-        tmp = eeprom_read_word(&backstagemem::minPumpOnTime);
-    return (uint8_t)((tmp >> 8 * pos) & 0xff);
-}
-
-void PolivSettings::setMinPumpOnTime(uint8_t value, uint8_t pos)
-{
-    static uint16_t tmp = 0;
-    ((uint8_t *) * (&tmp))[pos] = value;
-    if(pos == 1) {
-        eeprom_write_word(&backstagemem::minPumpOnTime, tmp);
-        tmp = 0;
-    }
-}
-
-uint8_t PolivSettings::getWaitTimeAfterpump(uint8_t pos) const
-{
-    static uint16_t tmp = 0;
-    if(pos == 0)
-        tmp = eeprom_read_word(&backstagemem::waitTimeAfterpump);
-    return (uint8_t)((tmp >> 8 * pos) & 0xff);
-}
-
-void PolivSettings::setWaitTimeAfterpump(uint8_t value, uint8_t pos)
-{
-    static uint16_t tmp = 0;
-    ((uint8_t *) * (&tmp))[pos] = value;
-    if(pos == 1) {
-        eeprom_write_word(&backstagemem::waitTimeAfterpump, tmp);
-        tmp = 0;
-    }
-}
-
-uint8_t PolivSettings::getMode() const
-{
-    return eeprom_read_byte(&backstagemem::polivMode);
-}
-
-void PolivSettings::setMode(uint8_t mode)
-{
-    eeprom_write_byte(&backstagemem::polivMode, mode);
-}
-
-uint16_t PolivSettings::getMinPumpOnTime() const
-{
-    return eeprom_read_word(&backstagemem::minPumpOnTime);
-}
-
-void PolivSettings::setMinPumpOnTime(const uint16_t & value)
-{
-    eeprom_write_word(&backstagemem::minPumpOnTime , value);
-}
-
-uint16_t PolivSettings::getMaxHumidity() const
-{
-    return eeprom_read_word(&backstagemem::maxHumidity);
-}
-
-void PolivSettings::setMaxHumidity(const uint16_t & value)
-{
-    eeprom_write_word(&backstagemem::maxHumidity , value);
-}
-
-uint16_t PolivSettings::getMinHumidity() const
-{
-    return eeprom_read_word(&backstagemem::minHumidity);
-}
-
-void PolivSettings::setMinHumidity(const uint16_t & value)
-{
-    eeprom_write_word(&backstagemem::minHumidity, value);
-}
-
-void PolivSettings::setAddress(uint8_t addr)
-{
-    eeprom_write_byte(&backstagemem::slaveAddress, addr);
-}
-
-uint8_t PolivSettings::getAddress() const
-{
-    return eeprom_read_byte(&backstagemem::slaveAddress);
+    return (I2CAddress)eeprom_read_byte(&backstagemem::slaveAddress);
 }
 
 uint8_t PolivSettings::getDeviceGUID(uint8_t pos) const
 {
     return eeprom_read_byte(&backstagemem::GUID[pos]);
 }
-
 uint8_t PolivSettings::getDeviceName(uint8_t pos) const
 {
     return eeprom_read_byte(&backstagemem::deviceName[pos]);
 }
-
 uint8_t PolivSettings::getDeviceSWver(uint8_t pos) const
 {
     return *(((uint8_t *) &backstagemem::deviceSWver) + pos);
 }
-
 uint8_t PolivSettings::getDeviceHWver(uint8_t pos) const
 {
     return eeprom_read_byte(((uint8_t *)&backstagemem::deviceHWver) + pos);

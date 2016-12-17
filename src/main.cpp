@@ -14,18 +14,17 @@ int main()
     auto hardware = HWiface::instance();
     hardware->init();
 
-
     PolivSettings settings;
     HerbsHandlerSimpl herbshandler(hardware, &settings);
 
-    UsiTwiSlave network(USI::instance(), MULTICAST_ADDR);
+    UsiTwiSlave network(USI::instance(), &settings, MULTICAST_ADDR);
     MappedMemory memory(&settings, &herbshandler, &network);
 
     I2CSlaveServer server(&network, &memory);
-    network.init(settings.getAddress());
 
-    sei();
+    network.init();
     hardware->turnLedOn();
+    sei();
 
     while(1) {
         herbshandler.handleHerbs();

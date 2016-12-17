@@ -37,124 +37,82 @@ enum DeviceMode {
     Auto = 2
 };
 
+typedef uint16_t HumidityVal;
+typedef uint16_t TimeSecVal;
 
 class IHerbsHandler
 {
 public:
     virtual void handleHerbs();
-
     static void delay_s(uint16_t s)
     {
         for(; s > 0; s--) _delay_ms(1000);
     }
 };
 
-class IPolivControl
+class IDeviceModeSettings
 {
 public:
-    virtual void setMode(DeviceMode);
-    virtual DeviceMode getPolivMode();
-    virtual DeviceStatus getStatus();
-    virtual uint16_t getHumidity(uint8_t);
+    virtual void setDeviceMode(DeviceMode mode);
+    virtual DeviceMode getDeviceMode() const;
 };
 
-class IPolivSettingsExt: public ISlaveAddress
+class IPolivControl : public IDeviceModeSettings
 {
 public:
-    virtual uint8_t getMinHumidity(uint8_t pos) const;
-    virtual void setMinHumidity(uint8_t value, uint8_t pos);
+    virtual DeviceStatus getDeviceStatus() const;
+    virtual HumidityVal getHumidity();
+};
 
-    virtual uint8_t getMaxHumidity(uint8_t pos) const;
-    virtual void setMaxHumidity(uint8_t value, uint8_t pos);
-
-    virtual uint8_t getMinPumpOnTime(uint8_t pos) const;
-    virtual void setMinPumpOnTime(uint8_t value, uint8_t pos);
-
-    virtual uint8_t getWaitTimeAfterpump(uint8_t pos) const;
-    virtual void setWaitTimeAfterpump(uint8_t value, uint8_t pos);
-
-    virtual uint8_t getMode() const;
-    virtual void setMode(uint8_t mode);
-
-    virtual uint8_t getAddress() const;
-    virtual void setAddress(uint8_t newAddr);
-
+class ISettingsExt
+{
+public:
     virtual uint8_t getDeviceGUID(uint8_t pos) const;
     virtual uint8_t getDeviceName(uint8_t pos) const;
     virtual uint8_t getDeviceSWver(uint8_t pos) const;
     virtual uint8_t getDeviceHWver(uint8_t pos) const;
+
+    virtual void setMinHumidity(HumidityVal value);
+    virtual void setMaxHumidity(HumidityVal value);
+    virtual void setPumpOnTime(TimeSecVal value);
+    virtual void setAbsorbedTime(TimeSecVal value);
+
+    virtual HumidityVal getMinHumidity() const;
+    virtual HumidityVal getMaxHumidity() const;
+    virtual TimeSecVal getPumpOnTime() const;
+    virtual TimeSecVal getAbsorbedTime() const;
 };
 
-class IPolivSettingsInt : public ISlaveAddress
+class ISettingsInt : public ISlaveAddress, public IDeviceModeSettings
 {
 public:
-    virtual uint16_t getMinHumidity() const;
-    virtual void setMinHumidity(const uint16_t & value);
-
-    virtual uint16_t getMaxHumidity() const;
-    virtual void setMaxHumidity(const uint16_t & value);
-
-    virtual uint16_t getMinPumpOnTime() const;
-    virtual void setMinPumpOnTime(const uint16_t & value);
-
-    virtual uint16_t getWaitTimeAfterpump() const;
-    virtual void setWaitTimeAfterpump(const uint16_t & value);
-
-    virtual DeviceMode getMode();
-    virtual void setMode(DeviceMode mode);
-
-
-    virtual uint8_t getAddress() const;
-    virtual void setAddress(uint8_t newAddr);
+    virtual HumidityVal getMinHumidity() const;
+    virtual HumidityVal getMaxHumidity() const;
+    virtual TimeSecVal getPumpOnTime() const;
+    virtual TimeSecVal getAbsorbedTime() const;
 };
 
-class PolivSettings : public IPolivSettingsInt, public IPolivSettingsExt
+class PolivSettings : public ISettingsInt, public ISettingsExt
 {
 public:
-    uint16_t getHumidity() const;
-    void setHumidity(const uint16_t & value);
+    void setDeviceMode(DeviceMode mode);
+    void setMinHumidity(HumidityVal value);
+    void setMaxHumidity(HumidityVal value);
+    void setPumpOnTime(TimeSecVal value);
+    void setAbsorbedTime(TimeSecVal value);
+    void setAddress(I2CAddress newAddr);
 
-    uint16_t getMinHumidity() const;
-    void setMinHumidity(const uint16_t & value);
-
-    uint16_t getMaxHumidity() const;
-    void setMaxHumidity(const uint16_t & value);
-
-    uint16_t getMinPumpOnTime() const;
-    void setMinPumpOnTime(const uint16_t & value);
-
-    uint16_t getWaitTimeAfterpump() const;
-    void setWaitTimeAfterpump(const uint16_t & value);
-
-    DeviceMode getMode();
-    void setMode(DeviceMode mode);
-
-
-    uint8_t getMinHumidity(uint8_t pos) const;
-    void setMinHumidity(uint8_t value, uint8_t pos);
-
-    uint8_t getMaxHumidity(uint8_t pos) const;
-    void setMaxHumidity(uint8_t value, uint8_t pos);
-
-    uint8_t getMinPumpOnTime(uint8_t pos) const;
-    void setMinPumpOnTime(uint8_t value, uint8_t pos);
-
-    uint8_t getWaitTimeAfterpump(uint8_t pos) const;
-    void setWaitTimeAfterpump(uint8_t value, uint8_t pos);
-
-    uint8_t getMode() const;
-    void setMode(uint8_t mode);
-
-
-    uint8_t getAddress() const;
-    void setAddress(uint8_t newAddr);
+    DeviceMode getDeviceMode() const;
+    HumidityVal getMinHumidity() const;
+    HumidityVal getMaxHumidity() const;
+    TimeSecVal getPumpOnTime() const;
+    TimeSecVal getAbsorbedTime() const;
+    I2CAddress getAddress() const;
 
     uint8_t getDeviceGUID(uint8_t pos) const;
     uint8_t getDeviceName(uint8_t pos) const;
     uint8_t getDeviceSWver(uint8_t pos) const;
     uint8_t getDeviceHWver(uint8_t pos) const;
-
-
 };
 
 #endif // SETTINGS_H

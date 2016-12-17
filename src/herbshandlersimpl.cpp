@@ -1,54 +1,50 @@
 #include "herbshandlersimpl.h"
 
 HerbsHandlerSimpl::HerbsHandlerSimpl(HWiface * hardware,
-                                     IPolivSettingsInt * settings): hdware(hardware), stngs(settings)
+                                     ISettingsInt * settings): hardware(hardware), settings(settings)
 {
-    this->stage = DeviceStatus::WaitForMinHumidity;
+    this->status = DeviceStatus::WaitForMinHumidity;
 
-    DeviceMode mode = stngs->getMode();
+    DeviceMode mode = settings->getDeviceMode();
     if(mode == DeviceMode::ManualOn)
-        hdware->turnPumpOn();
+        hardware->turnPumpOn();
     else
-        hdware->turnPumpOff();
+        hardware->turnPumpOff();
 }
 
 void HerbsHandlerSimpl::handleHerbs()
 {
-    if(stngs->getMode() == DeviceMode::Auto)
-        if(hdware->humidity() < stngs->getMinHumidity())
-            while(hdware->humidity() < stngs->getMaxHumidity()) {
-                hdware->turnPumpOn();
-                this->stage = DeviceStatus::PumpOn;
-                delay_s(stngs->getMinPumpOnTime());
-                hdware->turnPumpOff();
-                this->stage = DeviceStatus::AfterPumpWait;
-                delay_s(stngs->getWaitTimeAfterpump());
+    if(settings->getDeviceMode() == DeviceMode::Auto)
+        if(hardware->humidity() < settings->getMinHumidity())
+            while(hardware->humidity() < settings->getMaxHumidity()) {
+                hardware->turnPumpOn();
+                this->status = DeviceStatus::PumpOn;
+                delay_s(settings->getPumpOnTime());
+                hardware->turnPumpOff();
+                this->status = DeviceStatus::AfterPumpWait;
+                delay_s(settings->getAbsorbedTime());
             }
-    this->stage = DeviceStatus::WaitForMinHumidity;
+    this->status = DeviceStatus::WaitForMinHumidity;
 }
 
-
-void HerbsHandlerSimpl::setMode(DeviceMode mode)
+void HerbsHandlerSimpl::setDeviceMode(DeviceMode mode)
 {
-    stngs->setMode(mode);
+    settings->setDeviceMode(mode);
     if(mode == DeviceMode::ManualOn)
-        hdware->turnPumpOn();
+        hardware->turnPumpOn();
     else
-        hdware->turnPumpOff();
+        hardware->turnPumpOff();
 }
 
-DeviceMode HerbsHandlerSimpl::getPolivMode()
+DeviceMode HerbsHandlerSimpl::getDeviceMode() const
 {
-    return stngs->getMode();
+    return settings->getDeviceMode();
 }
-
-DeviceStatus HerbsHandlerSimpl::getStatus()
+DeviceStatus HerbsHandlerSimpl::getDeviceStatus() const
 {
-    return this->stage;
+    return this->status;
 }
-
-
-uint16_t HerbsHandlerSimpl::getHumidity(uint8_t)
+HumidityVal HerbsHandlerSimpl::getHumidity()
 {
-    return hdware->humidity();
+    return hardware->humidity();
 }

@@ -8,22 +8,24 @@ class  HerbsHandlerSimpl : public IHerbsHandler, public IPolivControl
 {
 public:
     HerbsHandlerSimpl(HWiface * hardware,
-                      IPolivSettingsInt * settings);
+                      ISettingsInt * settings);
 
     // IHerbsHandler interface
     void handleHerbs();
 
+    // IDeviceModeSettings interface
+    void setDeviceMode(DeviceMode);
+    DeviceMode getDeviceMode() const;
+
     // IPolivControl interface
-    void setMode(DeviceMode);
-    DeviceMode getPolivMode();
-    DeviceStatus getStatus();
-    uint16_t getHumidity(uint8_t);
+    DeviceStatus getDeviceStatus() const;
+    HumidityVal getHumidity();
 
 private:
-    HWiface * hdware;
-    IPolivSettingsInt * stngs;
-    DeviceStatus stage;
+    HWiface * hardware;
+    ISettingsInt * settings;
 
+    DeviceStatus status;
 };
 
 #endif // HERBSHANDLERSIMPL_H

@@ -8,9 +8,9 @@
 class MappedMemory : public IMappedMemory
 {
 public:
-    MappedMemory(IPolivSettingsExt * settings,
+    MappedMemory(ISettingsExt * settings,
                  IPolivControl * control,
-                 ITwiSlave * server);
+                 ITwiSlave * network);
 
     int8_t write(uint8_t addr, uint8_t data);
     int16_t read(uint8_t addr);
