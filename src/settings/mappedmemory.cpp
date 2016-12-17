@@ -228,7 +228,7 @@ class CommonShared : public
     Composite<GUID, DeviceName, DeviceSWver, DeviceHWver, SlaveAddress> {};
 
 class PolivShared : public
-    Composite<MainHumidity, MaxHumidity, MinHumidity, PumpOnTime,
+    Composite<MainHumidity, MinHumidity, MaxHumidity, PumpOnTime,
     AfterpumpWait, PolivStatus, PumpMode> {};
 
 
@@ -245,7 +245,7 @@ MappedMemory::MappedMemory(ISettingsExt * settngs,
     settings = settngs;
     control = contrl;
     network = net;
-    SlaveAddress::setISlaveAddress(network);
+    SlaveAddress::setISlaveAddress(net);
 }
 int8_t MappedMemory::write(uint8_t addr, uint8_t data)
 {
