@@ -11,7 +11,6 @@ HerbsHandlerSimpl::HerbsHandlerSimpl(HWiface * hardware,
     else
         hardware->turnPumpOff();
 }
-
 void HerbsHandlerSimpl::handleHerbs()
 {
     if(settings->getDeviceMode() == DeviceMode::Auto)
@@ -26,7 +25,6 @@ void HerbsHandlerSimpl::handleHerbs()
             }
     this->status = DeviceStatus::WaitForMinHumidity;
 }
-
 void HerbsHandlerSimpl::setDeviceMode(DeviceMode mode)
 {
     settings->setDeviceMode(mode);
@@ -35,7 +33,6 @@ void HerbsHandlerSimpl::setDeviceMode(DeviceMode mode)
     else
         hardware->turnPumpOff();
 }
-
 DeviceMode HerbsHandlerSimpl::getDeviceMode() const
 {
     return settings->getDeviceMode();
