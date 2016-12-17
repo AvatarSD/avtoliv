@@ -37,8 +37,8 @@
 #include <settings.h>
 #include <slaveaddres.h>
 
-IPolivSettingsExt * settng = nullptr; /* settings in eeprom */
-IPolivControl * ctrl = nullptr;       /* main poliv iface   */
+IPolivSettingsExt * settings = nullptr; /* settings in eeprom */
+IPolivControl * control = nullptr;       /* main poliv iface   */
 ITwiSlave * servr = nullptr;          /* server pointer to
                                          change address     */
 
@@ -51,7 +51,7 @@ public:
     }
     static ReadType read(Address addr, Num num)
     {
-        return settng->getDeviceGUID(addr);
+        return settings->getDeviceGUID(addr);
     }
 };
 class DeviceName : public Composite<uint8_t[DEVNAME_SIZE]>
@@ -63,7 +63,7 @@ public:
     }
     static ReadType read(Address addr, Num num = 0)
     {
-        return settng->getDeviceName(addr);
+        return settings->getDeviceName(addr);
     }
 };
 class DeviceSWver : public Composite<uint16_t>
@@ -75,7 +75,7 @@ public:
     }
     static ReadType read(Address addr, Num num = 0)
     {
-        return settng->getDeviceSWver(addr);
+        return settings->getDeviceSWver(addr);
     }
 };
 class DeviceHWver : public Composite<uint16_t>
@@ -87,7 +87,7 @@ public:
     }
     static ReadType read(Address addr, Num num = 0)
     {
-        return settng->getDeviceHWver(addr);
+        return settings->getDeviceHWver(addr);
     }
 };
 
@@ -103,7 +103,7 @@ public:
         static uint16_t hum = 0;
 
         if(addr == 0)
-            hum = ctrl->getHumidity(num);
+            hum = control->getHumidity(num);
 
         return (uint8_t)((hum >> (8 * addr)) & 0xff);
     }
@@ -113,12 +113,12 @@ class MaxHumidity : public Composite<uint16_t>
 public:
     static Error write(Address addr, uint8_t data, Num num)
     {
-        settng->setMaxHumidity(data, addr);
+        settings->setMaxHumidity(data, addr);
         return OK;
     }
     static ReadType read(Address addr, Num num = 0)
     {
-        return settng->getMaxHumidity(addr);
+        return settings->getMaxHumidity(addr);
     }
 };
 class MinHumidity : public Composite<uint16_t>
@@ -126,12 +126,12 @@ class MinHumidity : public Composite<uint16_t>
 public:
     static Error write(Address addr, uint8_t data, Num num)
     {
-        settng->setMinHumidity(data, addr);
+        settings->setMinHumidity(data, addr);
         return OK;
     }
     static ReadType read(Address addr, Num num = 0)
     {
-        return settng->getMinHumidity(addr);
+        return settings->getMinHumidity(addr);
     }
 };
 class AfterpumpWait : public Composite<uint16_t>
@@ -139,12 +139,12 @@ class AfterpumpWait : public Composite<uint16_t>
 public:
     static Error write(Address addr, uint8_t data, Num num)
     {
-        settng->setWaitTimeAfterpump(data, addr);
+        settings->setWaitTimeAfterpump(data, addr);
         return OK;
     }
     static ReadType read(Address addr, Num num = 0)
     {
-        return settng->getWaitTimeAfterpump(addr);
+        return settings->getWaitTimeAfterpump(addr);
     }
 };
 class PumpOnTime : public Composite<uint16_t>
@@ -152,12 +152,12 @@ class PumpOnTime : public Composite<uint16_t>
 public:
     static Error write(Address addr, uint8_t data, Num num)
     {
-        settng->setMinPumpOnTime(data, addr);
+        settings->setMinPumpOnTime(data, addr);
         return OK;
     }
     static ReadType read(Address addr, Num num = 0)
     {
-        return settng->getMinPumpOnTime(addr);
+        return settings->getMinPumpOnTime(addr);
     }
 };
 class PumpMode : public Composite<uint8_t>
@@ -165,12 +165,12 @@ class PumpMode : public Composite<uint8_t>
 public:
     static Error write(Address addr, uint8_t data, Num num)
     {
-        ctrl->setMode((PolivMode)data);
+        control->setMode((DeviceMode)data);
         return OK;
     }
     static ReadType read(Address addr, Num num = 0)
     {
-        return (uint8_t)ctrl->getPolivMode();
+        return (uint8_t)control->getPolivMode();
     }
 };
 class PolivStatus : public Composite<uint8_t>
@@ -182,7 +182,7 @@ public:
     }
     static ReadType read(Address addr, Num num = 0)
     {
-        return (uint8_t)ctrl->getStatus();
+        return (uint8_t)control->getStatus();
     }
 };
 
@@ -217,8 +217,8 @@ MappedMemory::MappedMemory(IPolivSettingsExt * settings,
                            IPolivControl * control,
                            ITwiSlave * server)
 {
-    settng = settings;
-    ctrl = control;
+    settings = settings;
+    control = control;
     servr = server;
     SlaveAddress<1>::setAddreses(server, settings);
 }

@@ -40,12 +40,12 @@ void PolivSettings::setWaitTimeAfterpump(const uint16_t & value)
     eeprom_write_word(&backstagemem::waitTimeAfterpump, value);
 }
 
-PolivMode PolivSettings::getMode()
+DeviceMode PolivSettings::getMode()
 {
-    return (PolivMode)eeprom_read_byte(&backstagemem::polivMode);
+    return (DeviceMode)eeprom_read_byte(&backstagemem::polivMode);
 }
 
-void PolivSettings::setMode(PolivMode mode)
+void PolivSettings::setMode(DeviceMode mode)
 {
     eeprom_write_byte(&backstagemem::polivMode, (uint8_t)mode);
 }

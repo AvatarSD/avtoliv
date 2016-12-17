@@ -19,19 +19,19 @@
 
 //default instance for first-time program
 #define I2C_SLAVE_ADDRESS 0x15
-#define DEFAULT_MODE PolivMode::Auto
+#define DEFAULT_MODE DeviceMode::Auto
 #define DEFAULT_MINHUMODITY 350
 #define DEFAULT_MAXHUMODITY 700
 #define DEFAULT_PUMPTIME 4
 #define DEFAULT_AFTERPUMPTIME 120
 
 
-enum PolivStage {
+enum DeviceStatus {
     WaitForMinHumidity,
     PumpOn,
     AfterPumpWait
 };
-enum PolivMode {
+enum DeviceMode {
     ManualOff = 0,
     ManualOn = 1,
     Auto = 2
@@ -52,9 +52,9 @@ public:
 class IPolivControl
 {
 public:
-    virtual void setMode(PolivMode);
-    virtual PolivMode getPolivMode();
-    virtual PolivStage getStatus();
+    virtual void setMode(DeviceMode);
+    virtual DeviceMode getPolivMode();
+    virtual DeviceStatus getStatus();
     virtual uint16_t getHumidity(uint8_t);
 };
 
@@ -100,8 +100,8 @@ public:
     virtual uint16_t getWaitTimeAfterpump() const;
     virtual void setWaitTimeAfterpump(const uint16_t & value);
 
-    virtual PolivMode getMode();
-    virtual void setMode(PolivMode mode);
+    virtual DeviceMode getMode();
+    virtual void setMode(DeviceMode mode);
 
 
     virtual uint8_t getAddress() const;
@@ -126,8 +126,8 @@ public:
     uint16_t getWaitTimeAfterpump() const;
     void setWaitTimeAfterpump(const uint16_t & value);
 
-    PolivMode getMode();
-    void setMode(PolivMode mode);
+    DeviceMode getMode();
+    void setMode(DeviceMode mode);
 
 
     uint8_t getMinHumidity(uint8_t pos) const;

@@ -14,15 +14,15 @@ public:
     void handleHerbs();
 
     // IPolivControl interface
-    void setMode(PolivMode);
-    PolivMode getPolivMode();
-    PolivStage getStatus();
+    void setMode(DeviceMode);
+    DeviceMode getPolivMode();
+    DeviceStatus getStatus();
     uint16_t getHumidity(uint8_t);
 
 private:
     HWiface * hdware;
     IPolivSettingsInt * stngs;
-    PolivStage stage;
+    DeviceStatus stage;
 
 };
 

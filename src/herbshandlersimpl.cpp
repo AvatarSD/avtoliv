@@ -3,10 +3,10 @@
 HerbsHandlerSimpl::HerbsHandlerSimpl(HWiface * hardware,
                                      IPolivSettingsInt * settings): hdware(hardware), stngs(settings)
 {
-    this->stage = PolivStage::WaitForMinHumidity;
+    this->stage = DeviceStatus::WaitForMinHumidity;
 
-    PolivMode mode = stngs->getMode();
-    if(mode == PolivMode::ManualOn)
+    DeviceMode mode = stngs->getMode();
+    if(mode == DeviceMode::ManualOn)
         hdware->turnPumpOn();
     else
         hdware->turnPumpOff();
@@ -14,35 +14,35 @@ HerbsHandlerSimpl::HerbsHandlerSimpl(HWiface * hardware,
 
 void HerbsHandlerSimpl::handleHerbs()
 {
-    if(stngs->getMode() == PolivMode::Auto)
+    if(stngs->getMode() == DeviceMode::Auto)
         if(hdware->humidity() < stngs->getMinHumidity())
             while(hdware->humidity() < stngs->getMaxHumidity()) {
                 hdware->turnPumpOn();
-                this->stage = PolivStage::PumpOn;
+                this->stage = DeviceStatus::PumpOn;
                 delay_s(stngs->getMinPumpOnTime());
                 hdware->turnPumpOff();
-                this->stage = PolivStage::AfterPumpWait;
+                this->stage = DeviceStatus::AfterPumpWait;
                 delay_s(stngs->getWaitTimeAfterpump());
             }
-    this->stage = PolivStage::WaitForMinHumidity;
+    this->stage = DeviceStatus::WaitForMinHumidity;
 }
 
 
-void HerbsHandlerSimpl::setMode(PolivMode mode)
+void HerbsHandlerSimpl::setMode(DeviceMode mode)
 {
     stngs->setMode(mode);
-    if(mode == PolivMode::ManualOn)
+    if(mode == DeviceMode::ManualOn)
         hdware->turnPumpOn();
     else
         hdware->turnPumpOff();
 }
 
-PolivMode HerbsHandlerSimpl::getPolivMode()
+DeviceMode HerbsHandlerSimpl::getPolivMode()
 {
     return stngs->getMode();
 }
 
-PolivStage HerbsHandlerSimpl::getStatus()
+DeviceStatus HerbsHandlerSimpl::getStatus()
 {
     return this->stage;
 }
