@@ -29,7 +29,7 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/src/net/I2C/
 	${CMAKE_CURRENT_SOURCE_DIR}/src/net/server/
 	${CMAKE_CURRENT_SOURCE_DIR}/src/net/polymorphmemory
-	${CMAKE_CURRENT_SOURCE_DIR}/src/net/slaveAddressCell)
+	${CMAKE_CURRENT_SOURCE_DIR}/src/net/cells)
 
 
 

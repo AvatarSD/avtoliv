@@ -3,6 +3,7 @@
 
 #include <server.h>
 #include <settings.h>
+#include <idcells.h>
 
 
 #define readByte(word, addr) ((uint8_t)((word >> (addr * 8)) & 0xFF));
@@ -16,141 +17,125 @@ int8_t writeWord(TypeSize & staticReg, uint8_t addr, uint8_t data)
     return ERR;
 }
 
-class GUID : public Composite<uint8_t[GUID_SIZE]>
+class MainHumidity : public IMemory
 {
 public:
-    Error write(Address addr, uint8_t data, Num num)
-    {
-        return OK;
-    }
-    ReadType read(Address addr, Num num)
-    {
-        return settings->getDeviceGUID(addr);
-    }
-};
-class DeviceName : public Composite<uint8_t[DEVNAME_SIZE]>
-{
-public:
+    MainHumidity(IPolivControl * control) : control(control) {}
     Error write(Address addr, uint8_t data, Num num)
     {
         return OK;
     }
     ReadType read(Address addr, Num num = 0)
     {
-        return settings->getDeviceName(addr);
-    }
-};
-class DeviceSWver : public Composite<uint16_t>
-{
-public:
-    Error write(Address addr, uint8_t data, Num num)
-    {
-        return OK;
-    }
-    ReadType read(Address addr, Num num = 0)
-    {
-        return settings->getDeviceSWver(addr);
-    }
-};
-class DeviceHWver : public Composite<uint16_t>
-{
-public:
-    Error write(Address addr, uint8_t data, Num num)
-    {
-        return OK;
-    }
-    ReadType read(Address addr, Num num = 0)
-    {
-        return settings->getDeviceHWver(addr);
-    }
-};
-
-class MainHumidity : public Composite<uint16_t>
-{
-public:
-    Error write(Address addr, uint8_t data, Num num)
-    {
-        return OK;
-    }
-    ReadType read(Address addr, Num num = 0)
-    {
-        static HumidityVal tmp;
         if(addr == 0) tmp = control->getHumidity();
         return readByte(tmp, addr);
     }
+    size_t size()
+    {
+        return sizeof(HumidityVal);
+    }
+private:
+    IPolivControl * control;
+    HumidityVal tmp;
 };
-class MaxHumidity : public Composite<uint16_t>
+class MaxHumidity : public IMemory
 {
 public:
+    MaxHumidity(ISettingsExt * settings) : settings(settings) {}
     Error write(Address addr, uint8_t data, Num num)
     {
-        static HumidityVal tmp;
-        if(writeWord(tmp, addr, data) == OK)
-            settings->setMaxHumidity(tmp);
+        if(writeWord(tmp_w, addr, data) == OK)
+            settings->setMaxHumidity(tmp_w);
         return OK;
     }
     ReadType read(Address addr, Num num = 0)
     {
-        static HumidityVal tmp;
-        if(addr == 0) tmp = settings->getMaxHumidity();
-        return readByte(tmp, addr);
+        if(addr == 0) tmp_r = settings->getMaxHumidity();
+        return readByte(tmp_r, addr);
     }
+    size_t size()
+    {
+        return sizeof(HumidityVal);
+    }
+private:
+    ISettingsExt * settings;
+    HumidityVal tmp_r, tmp_w;
 };
-class MinHumidity : public Composite<uint16_t>
+class MinHumidity : public IMemory
 {
 public:
+    MinHumidity(ISettingsExt * settings) : settings(settings) {}
     Error write(Address addr, uint8_t data, Num num)
     {
-        static HumidityVal tmp;
-        if(writeWord(tmp, addr, data) == OK)
-            settings->setMinHumidity(tmp);
+        if(writeWord(tmp_w, addr, data) == OK)
+            settings->setMinHumidity(tmp_w);
         return OK;
     }
     ReadType read(Address addr, Num num = 0)
     {
-        static HumidityVal tmp;
-        if(addr == 0) tmp = settings->getMinHumidity();
-        return readByte(tmp, addr);
+        if(addr == 0) tmp_r = settings->getMinHumidity();
+        return readByte(tmp_r, addr);
     }
+    size_t size()
+    {
+        return sizeof(HumidityVal);
+    }
+private:
+    ISettingsExt * settings;
+    HumidityVal tmp_r, tmp_w;
 };
-class AfterpumpWait : public Composite<uint16_t>
+class AfterpumpWait : public IMemory
 {
 public:
+    AfterpumpWait(ISettingsExt * settings) : settings(settings) {}
     Error write(Address addr, uint8_t data, Num num)
     {
-        static TimeSecVal tmp;
-        if(writeWord(tmp, addr, data) == OK)
-            settings->setAbsorbedTime(tmp);
+        if(writeWord(tmp_w, addr, data) == OK)
+            settings->setAbsorbedTime(tmp_w);
         return OK;
     }
     ReadType read(Address addr, Num num = 0)
     {
-        static TimeSecVal tmp;
-        if(addr == 0) tmp = settings->getAbsorbedTime();
-        return readByte(tmp, addr);
+        if(addr == 0) tmp_r = settings->getAbsorbedTime();
+        return readByte(tmp_r, addr);
     }
+    size_t size()
+    {
+        return sizeof(TimeSecVal);
+    }
+private:
+    ISettingsExt * settings;
+    TimeSecVal tmp_r, tmp_w;
 };
-class PumpOnTime : public Composite<uint16_t>
+class PumpOnTime : public IMemory
 {
 public:
+    PumpOnTime(ISettingsExt * settings) : settings(settings) {}
     Error write(Address addr, uint8_t data, Num num)
     {
-        static TimeSecVal tmp;
-        if(writeWord(tmp, addr, data) == OK)
-            settings->setPumpOnTime(tmp);
+        if(writeWord(tmp_w, addr, data) == OK)
+            settings->setPumpOnTime(tmp_w);
         return OK;
 
     }
     ReadType read(Address addr, Num num = 0)
     {
-        static TimeSecVal tmp;
-        if(addr == 0) tmp = settings->getPumpOnTime();
-        return readByte(tmp, addr);
+        if(addr == 0) tmp_r = settings->getPumpOnTime();
+        return readByte(tmp_r, addr);
     }
+    size_t size()
+    {
+        return sizeof(TimeSecVal);
+    }
+
+private:
+    ISettingsExt * settings;
+    TimeSecVal tmp_r, tmp_w;
 };
-class PumpMode : public Composite<uint8_t>
+class PumpMode : public IMemory
 {
 public:
+    PumpMode(IPolivControl * control) : control(control) {}
     Error write(Address addr, uint8_t data, Num num)
     {
         control->setDeviceMode((DeviceMode)data);
@@ -160,10 +145,17 @@ public:
     {
         return (uint8_t)control->getDeviceMode();
     }
+    size_t size()
+    {
+        return sizeof(uint8_t);
+    }
+private:
+    IPolivControl * control;
 };
-class PolivStatus : public Composite<uint8_t>
+class PolivStatus : public IMemory
 {
 public:
+    PolivStatus(IPolivControl * control) : control(control) {}
     Error write(Address addr, uint8_t data, Num num)
     {
         return OK;
@@ -172,6 +164,12 @@ public:
     {
         return (uint8_t)control->getDeviceStatus();
     }
+    size_t size()
+    {
+        return sizeof(uint8_t);
+    }
+private:
+    IPolivControl * control;
 };
 
 class _res_ : public IMemory
@@ -192,16 +190,47 @@ public:
 
 };
 
-//class CommonShared : public
-//    Composite<GUID, DeviceName, DeviceSWver, DeviceHWver, SlaveAddress> {};
-
 class PolivShared : public
     Composite<MainHumidity, MinHumidity, MaxHumidity, PumpOnTime,
-    AfterpumpWait, PolivStatus, PumpMode> {};
+    AfterpumpWait, PolivStatus, PumpMode>
+{
+public:
+    PolivShared(IPolivControl * control, ISettingsExt * settings) :
+        Composite(&humidity, &minHumidity, &maxHumidity,
+                  &pumpOnTime, &afterpumpWait, &status,
+                  &mode),
+        humidity(control), minHumidity(settings),
+        maxHumidity(settings), pumpOnTime(settings),
+        afterpumpWait(settings), status(control), mode(control) {}
+
+private:
+    MainHumidity humidity;
+    MinHumidity minHumidity;
+    MaxHumidity maxHumidity;
+    PumpOnTime pumpOnTime;
+    AfterpumpWait afterpumpWait;
+    PolivStatus status;
+    PumpMode mode;
+};
 
 
 class MainMem : public
-    Composite<CommonShared, PolivShared, _res_> {};
+    Composite<CommonShared, PolivShared, _res_>
+{
+public:
+    MainMem(IPolivControl * control, ISettingsExt * settings) :
+        Composite(&shared, &poliv, &res),
+        shared(settings), poliv(control, settings) {}
+
+    void setNetworkObject(ISlaveAddress * iAddress)
+    {
+        shared.setNetworkObject(iAddress);
+    }
+private:
+    CommonShared shared;
+    PolivShared poliv;
+    _res_ res;
+};
 
 
 
