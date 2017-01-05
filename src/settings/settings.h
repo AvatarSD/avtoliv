@@ -4,6 +4,7 @@
 #include <inttypes.h>
 #include <util/delay.h>
 #include <usiTwiSlave.h>
+#include <idcells.h>
 
 #define VER(MAJOR, MINOR) ((MAJOR << 8)|(MINOR))
 
@@ -64,14 +65,9 @@ public:
     virtual HumidityVal getHumidity();
 };
 
-class ISettingsExt
+class ISettingsExt : public ISettingsGeneral
 {
 public:
-    virtual uint8_t getDeviceGUID(uint8_t pos) const;
-    virtual uint8_t getDeviceName(uint8_t pos) const;
-    virtual uint8_t getDeviceSWver(uint8_t pos) const;
-    virtual uint8_t getDeviceHWver(uint8_t pos) const;
-
     virtual void setMinHumidity(HumidityVal value);
     virtual void setMaxHumidity(HumidityVal value);
     virtual void setPumpOnTime(TimeSecVal value);

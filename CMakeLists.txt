@@ -15,10 +15,9 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 project("avtopoliv")
 
-
-SET(flags "-mmcu=attiny85 -D__AVR_ATtiny85__ -DF_CPU=8000000UL \
-	-Wall -Wl,--gc-sections -fdata-sections -ffunction-sections \
-	-fno-threadsafe-statics -Os -flto -fshort-enums -mcall-prologues -Wl,--relax")
+SET(flags "-mmcu=attiny85 -D__AVR_ATtiny85__ -DF_CPU=1000000UL \
+	-Os -Wall -Wl,--gc-sections -fdata-sections -ffunction-sections \
+	-fno-threadsafe-statics -flto -fshort-enums ")
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${flags}")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flags}")
 
@@ -30,9 +29,7 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/src/net/I2C/
 	${CMAKE_CURRENT_SOURCE_DIR}/src/net/server/
 	${CMAKE_CURRENT_SOURCE_DIR}/src/net/polymorphmemory
-	${CMAKE_CURRENT_SOURCE_DIR}/src/net/slaveAddressCell)
-
-
+	${CMAKE_CURRENT_SOURCE_DIR}/src/net/cells)
 
 
 
